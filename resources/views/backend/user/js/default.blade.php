@@ -1,0 +1,8 @@
+@include('backend.user.js.list')
+@include('backend.user.js.add')
+@include('backend.user.js.edit')
+@include('backend.user.js.delete')
+@include('backend.user.js.active')
+@include('backend.user.js.desactive')
+@include('backend.user.js.validation')
+@include('backend.user.js.detail')

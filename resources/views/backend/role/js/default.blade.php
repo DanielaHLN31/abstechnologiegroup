@@ -1,0 +1,6 @@
+@include('backend.role.js.list')
+@include('backend.role.js.add')
+@include('backend.role.js.edit')
+@include('backend.role.js.delete')
+@include('backend.role.js.desactive')
+@include('backend.role.js.active')
