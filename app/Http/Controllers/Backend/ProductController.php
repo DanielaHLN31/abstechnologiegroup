@@ -444,7 +444,7 @@ class ProductController extends Controller
             $product->delete(); // soft delete
 
             return response()->json([
-                'success' => true,
+                'succès' => true,
                 'alert-type' => 'Succès',
                 'message' => 'Produit supprimé avec succès.'
             ]);

@@ -67,10 +67,6 @@ class UsersTablesSeeder extends Seeder
             DB::commit();
 
             $this->command->info('✅ Utilisateurs créés avec succès :');
-            $this->command->info('   - 1 admin principal');
-            $this->command->info('   - 5 managers');
-            $this->command->info('   - 5 superviseurs');
-            $this->command->info('   - 5 utilisateurs simples');
 
         } catch (\Exception $e) {
             DB::rollBack();

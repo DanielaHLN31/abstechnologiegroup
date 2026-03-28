@@ -22,8 +22,8 @@
            VARIABLES & BASE
         ══════════════════════════════════════════════ */
         :root {
-            --primary:   #717fe0;
-            --primary-d: #5a6bc5;
+            --primary:   #0066CC;
+            --primary-d: #0066CC;
             --danger:    #e65540;
             --success:   #28a745;
             --text:      #333;
@@ -685,7 +685,7 @@
                                                 </span>
                                             </td>
                                             <td>
-                                                <a href="{{ route('client.order.show', $order->id) }}" class="btn-order-detail">
+                                                <a href="{{ route('client.order.show', $order->order_number) }}" class="btn-order-detail">
                                                     <i class="zmdi zmdi-eye"></i> Détail
                                                 </a>
                                             </td>
@@ -720,7 +720,7 @@
                         <div class="account-card-body">
 
                             {{-- Avatar --}}
-                            <div class="avatar-upload-wrap">
+                            {{-- <div class="avatar-upload-wrap">
                                 <div class="avatar-preview" id="avatar-preview">
                                     @if(auth()->user()->avatar)
                                         <img src="{{ asset('storage/' . auth()->user()->avatar) }}" id="avatar-img">
@@ -736,7 +736,7 @@
                                     </label>
                                     <input type="file" id="avatar-input" accept="image/*" class="d-none">
                                 </div>
-                            </div>
+                            </div> --}}
 
                             <form action="{{ route('client.account.update') }}" method="POST" enctype="multipart/form-data" id="profile-form">
                                 @csrf @method('PUT')
@@ -771,17 +771,17 @@
                                         <div class="form-group mb-4">
                                             <label>Téléphone</label>
                                             <input type="tel" name="phone" class="form-control"
-                                                value="{{ auth()->user()->phone ?? '' }}"
+                                                value="{{ auth()->user()->client->phone ?? '' }}"
                                                 placeholder="+229 XX XX XX XX">
                                         </div>
                                     </div>
-                                    <div class="col-12">
+                                    {{-- <div class="col-12">
                                         <div class="form-group mb-4">
                                             <label>Date de naissance</label>
                                             <input type="date" name="birth_date" class="form-control"
-                                                value="{{ auth()->user()->birth_date ?? '' }}">
+                                                value="{{ auth()->user()->client->birth_date ?? '' }}">
                                         </div>
-                                    </div>
+                                    </div> --}}
                                 </div>
 
                                 <div class="d-flex gap-3 flex-wrap" style="gap:12px">

@@ -16,13 +16,13 @@
         <meta name="description" content="Créez un compte client pour accéder à la plateforme ABS TECHNOLOGIE." />
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <!-- Favicon -->
-        <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('backend/img/favicon/abs_logo.png')}}" />
-        <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('backend/img/favicon/abs_logo.png')}}" />
-        <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('backend/img/favicon/abs_logo.png')}}" />
+        <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('backend/img/favicon/favicon.png')}}" />
+        <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('backend/img/favicon/favicon.png')}}" />
+        <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('backend/img/favicon/favicon.png')}}" />
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <meta name="robots" content="index, follow">
         <link rel="canonical" href="https://abs-technologie.com/">
-        <meta name="image" content="{{ asset('backend/img/favicon/abs_logo.png')}}">
+        <meta name="image" content="{{ asset('backend/img/favicon/favicon.png')}}">
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.googleapis.com" />

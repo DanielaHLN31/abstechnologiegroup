@@ -150,7 +150,7 @@ Route::middleware(['auth.admin'])->group(function () {
         Route::get('/edit/{id}',[ProductController::class,'Editproducts'])->name('edit.products');
         Route::post('/update',[ProductController::class,'Updateproducts'])->name('update.products');
         Route::get('/{id}', [ProductController::class, 'ShowProduct'])->name('show.product');
-        Route::delete('/{id}', [ProductController::class, 'DeleteProduct']);
+        Route::delete('/delete/{id}', [ProductController::class, 'DeleteProduct']);
         Route::post('/{id}/status', [ProductController::class, 'ToggleStatus']);
     });
 
@@ -203,11 +203,11 @@ Route::middleware(['auth.admin'])->group(function () {
 
 });
 
-    // Paiements (protégés par auth)
-    Route::post('/payment/initiate', [PaymentController::class, 'initiate'])->name('payment.initiate');
-    Route::post('/payment/check-status', [PaymentController::class, 'checkStatus'])->name('payment.check-status');
-    Route::post('/payment/callback', [PaymentController::class, 'callback'])->name('payment.callback');
-// ==================== WEBHOOK (PUBLIC) ====================
-Route::post('/payment/webhook/fedapay', [PaymentController::class, 'webhook'])
-    ->name('payment.webhook.fedapay')
+
+Route::get('/payment/callback', [PaymentController::class, 'callback'])
+    ->name('payment.callback');
+ 
+// ✅ WEBHOOK en POST  (FedaPay appelle ce endpoint serveur-to-serveur)
+Route::post('/payment/webhook', [PaymentController::class, 'webhook'])
+    ->name('payment.webhook')
     ->withoutMiddleware([\App\Http\Middleware\VerifyCsrfToken::class]);

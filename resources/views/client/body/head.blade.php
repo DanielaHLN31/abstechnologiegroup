@@ -33,8 +33,10 @@
 	<link rel="stylesheet" type="text/css" href="{{ asset('frontend/css/main.css') }}">
 <!--===============================================================================================-->
 
+	{{-- <link rel="preconnect" href="https://fonts.googleapis.com">
+	<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet"> --}}
 
 <!-- Toastr CSS -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+{{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"> --}}
 {{-- @stack('links') --}}
 	
