@@ -429,6 +429,55 @@
                 padding: 6px 12px;
             }
         }
+        /* ==================== PAGINATION ==================== */
+        .pagination-custom {
+            display: flex;
+            justify-content: center;
+            margin-top: 40px;
+        }
+
+        .pagination-custom .pagination {
+            display: flex;
+            gap: 6px;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .pagination-custom .page-item .page-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--dark);
+            background: var(--white);
+            border: 1.5px solid var(--light-gray);
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .pagination-custom .page-item .page-link:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: #E8F0FE;
+        }
+
+        .pagination-custom .page-item.active .page-link {
+            background: var(--gradient-primary);
+            color: var(--white);
+            border-color: transparent;
+            box-shadow: 0 4px 12px rgba(0, 102, 204, 0.3);
+        }
+
+        .pagination-custom .page-item.disabled .page-link {
+            opacity: 0.35;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
 
         
     </style>
@@ -625,9 +674,29 @@
             </div>
 
             <!-- Pagination -->
+            
+            @if($orders->hasPages())
             <div class="pagination-custom">
-                {{ $orders->links() }}
+                <ul class="pagination">
+                    {{-- Précédent --}}
+                    <li class="page-item {{ $orders->onFirstPage() ? 'disabled' : '' }}">
+                        <a class="page-link" href="{{ $orders->previousPageUrl() ?? '#' }}">‹</a>
+                    </li>
+
+                    {{-- Pages --}}
+                    @foreach($orders->getUrlRange(1, $orders->lastPage()) as $page => $url)
+                        <li class="page-item {{ $page == $orders->currentPage() ? 'active' : '' }}">
+                            <a class="page-link" href="{{ $url }}">{{ $page }}</a>
+                        </li>
+                    @endforeach
+
+                    {{-- Suivant --}}
+                    <li class="page-item {{ !$orders->hasMorePages() ? 'disabled' : '' }}">
+                        <a class="page-link" href="{{ $orders->nextPageUrl() ?? '#' }}">›</a>
+                    </li>
+                </ul>
             </div>
+            @endif
 
         @endif
     </div>

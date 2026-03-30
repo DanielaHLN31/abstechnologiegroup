@@ -81,13 +81,13 @@ $(document).ready(function() {
                 }
 
                 // ── Prix ─────────────────────────────────────────────
-                let priceHtml = `<span class="pd-price">${parseFloat(product.price).toLocaleString('fr-FR')} <small>FCFA</small></span>`;
-                if (product.compare_price) {
-                    const pct = Math.round((1 - product.price / product.compare_price) * 100);
-                    priceHtml += `
-                        <span class="pd-price-old">${parseFloat(product.compare_price).toLocaleString('fr-FR')} FCFA</span>
-                        <span class="pd-discount">−${pct}%</span>`;
-                }
+                // let priceHtml = `<span class="pd-price">${parseFloat(product.price).toLocaleString('fr-FR')} <small>FCFA</small></span>`;
+                // if (product.compare_price) {
+                //     const pct = Math.round((1 - product.price / product.compare_price) * 100);
+                //     priceHtml += `
+                //         <span class="pd-price-old">${parseFloat(product.compare_price).toLocaleString('fr-FR')} FCFA</span>
+                //         <span class="pd-discount">−${pct}%</span>`;
+                // }
 
                 // ── Couleurs ─────────────────────────────────────────
                 let colorsHtml = '';
