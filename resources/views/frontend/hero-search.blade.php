@@ -259,6 +259,9 @@
     .hs-btn { padding: 0 16px; }
     .hs-wrap { max-width: 100%; }
 }
+.hs-dropdown.open {
+		display: none !important;
+	}
 </style>
 
 {{-- ══════════════ HERO SEARCH ══════════════ --}}
@@ -427,14 +430,29 @@
 
         results.forEach(function (item, i) {
             var imgSrc = item.image || '{{ asset("frontend/images/no-image.jpg") }}';
-            html += '<a href="' + esc(item.url) + '" class="hs-result" data-idx="' + i + '">'
+            // On encode les données JSON en attributs HTML-safe
+            var imagesJson = esc(JSON.stringify(item.images || []));
+            var colorsJson = esc(JSON.stringify(item.colors || []));
+            var specsJson  = esc(JSON.stringify(item.specs  || []));
+
+            html += '<div class="hs-result js-show-modal1"'
+                + ' style="cursor:pointer"'
+                + ' data-idx="'                  + i                        + '"'
+                + ' data-product-id="'           + esc(item.id)             + '"'
+                + ' data-product-name="'         + esc(item.name)           + '"'
+                + ' data-product-price="'        + esc(item.price)          + '"'
+                + ' data-product-description="'  + esc(item.description||'')+ '"'
+                + ' data-product-images=\''      + imagesJson               + '\''
+                + ' data-product-colors=\''      + colorsJson               + '\''
+                + ' data-product-specs=\''       + specsJson                + '\''
+                + '>'
                 + '<img class="hs-result-img" src="' + esc(imgSrc) + '" alt="' + esc(item.name) + '" loading="lazy">'
                 + '<div class="hs-result-body">'
                 + '<div class="hs-result-name">' + highlight(item.name, q) + '</div>'
                 + (item.category ? '<div class="hs-result-cat">' + esc(item.category) + '</div>' : '')
                 + '</div>'
                 + '<div class="hs-result-price">' + esc(item.price) + ' FCFA</div>'
-                + '</a>';
+                + '</div>';
         });
 
         html += '</div>'
@@ -444,6 +462,14 @@
             + '</a>';
 
         dropdown.innerHTML = html;
+
+        // Ferme le dropdown quand on clique sur un résultat
+        dropdown.querySelectorAll('.hs-result.js-show-modal1').forEach(function(el) {
+            el.addEventListener('click', function() {
+                close();
+            });
+        });
+
         currentItems = dropdown.querySelectorAll('.hs-result, .hs-see-all');
         open();
     }

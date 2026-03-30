@@ -29,7 +29,7 @@ use App\Http\Controllers\Backend\NotificationController;
 // ==================== ROUTES PUBLIQUES ====================
 Route::middleware('guest')->group(function () {
     // Admin login
-    Route::get('/', [AuthController::class, 'login'])->name('login');
+    Route::get('/login', [AuthController::class, 'login'])->name('login');
     Route::post('/login/store', [AuthController::class, 'LoginFormStore'])->name('login.Store');
 
     // Client login/register
@@ -51,9 +51,9 @@ Route::get('/politique-de-confidentialite' , function(){
 Route::post('/check-user', [AuthController::class, 'checkUser'])->name('check.user');
 
 // ==================== ROUTES CLIENT PUBLIQUES ====================
+Route::get('/', [ClientController::class, 'index'])->name('client.index');
 Route::prefix('client')->name('client.')->group(function () {
     // Pages publiques (accessibles sans connexion)
-    Route::get('/index', [ClientController::class, 'index'])->name('index');
     Route::get('/about', [ClientController::class, 'about'])->name('about');
     Route::get('/product', [ClientController::class, 'product'])->name('product');
     Route::get('/products/{id}', [ClientController::class, 'show'])->name('product.detail');

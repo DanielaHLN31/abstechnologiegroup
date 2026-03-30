@@ -31,7 +31,7 @@
                             <input type="text" name="name" id="edit_name" class="form-control" placeholder="Ex: Smartphone X" />
                             <div class="invalid-feedback"></div>
                         </div>
-                        <div class="col-md-3 mb-3">
+                        <div class="col-md-6 mb-3">
                             <label class="form-label required">Prix</label>
                             <div class="input-group">
                                 <span class="input-group-text">FCFA</span>
@@ -39,14 +39,14 @@
                             </div>
                             <div class="invalid-feedback"></div>
                         </div>
-                        <div class="col-md-3 mb-3">
+                        {{-- <div class="col-md-3 mb-3">
                             <label class="form-label">Prix barré (promo)</label>
                             <div class="input-group">
                                 <span class="input-group-text">FCFA</span>
                                 <input type="number" name="compare_price" id="edit_compare_price" class="form-control" min="0" step="0.01" />
                             </div>
                             <div class="invalid-feedback"></div>
-                        </div>
+                        </div> --}}
                     </div>
 
                     <div class="row g-3">

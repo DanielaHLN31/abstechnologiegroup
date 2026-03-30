@@ -34,7 +34,7 @@
 
         /* ── Search Hero ── */
         .srp-hero {
-            background: var(--ink);
+            background: #8cc6ff;
             padding: 56px 0 0;
             position: relative;
             overflow: hidden;
@@ -64,6 +64,7 @@
             padding: 0 32px 40px;
             position: relative;
             z-index: 1;
+            margin-top: 5rem;
         }
 
         .srp-breadcrumb {
@@ -98,7 +99,7 @@
 
         .srp-title em {
             font-style: normal;
-            color: #5a8fff;
+            color: #0066cc;
         }
 
         .srp-meta {
@@ -124,8 +125,8 @@
             margin-top: 28px;
             display: flex;
             max-width: 560px;
-            background: rgba(255,255,255,0.08);
-            border: 1px solid rgba(255,255,255,0.12);
+            background: rgba(255, 255, 255, 0);
+            border: 1px solid #0066cc;
             border-radius: 50px;
             overflow: hidden;
             backdrop-filter: blur(10px);
@@ -702,21 +703,57 @@
 
         @media (max-width: 900px) { .srp-filter-toggle { display: flex; } }
     </style>
+
+    <style>
+        .srp-pagination {
+            display: flex;
+            justify-content: center;
+            gap: 6px;
+            margin-top: 48px;
+        }
+
+        .srp-page-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 38px;
+            height: 38px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            font-family: var(--font-body);
+            color: var(--ink);
+            background: var(--surface);
+            border: 1px solid var(--surface-3);
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .srp-page-btn:hover:not(.disabled):not(.active) {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .srp-page-btn.active {
+            background: var(--accent);
+            color: #fff;
+            border-color: var(--accent);
+            font-weight: 700;
+        }
+
+        .srp-page-btn.disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+    </style>
 </head>
 
 <body class="animsition">
     @include('client.body.header')
 
     {{-- ── Hero ── --}}
-    <div class="srp-hero">
-        <div class="srp-hero-inner">
-            <div class="srp-breadcrumb">
-                <a href="{{ route('client.index') }}">Accueil</a>
-                <span>/</span>
-                <a href="{{ route('client.product') }}">Boutique</a>
-                <span>/</span>
-                <span>Recherche</span>
-            </div>
+    <div class="srp-hero ">
+        <div class="srp-hero-inner container py-5">
 
             @if($query)
                 <h1 class="srp-title">
@@ -734,13 +771,15 @@
             </div>
 
             {{-- Nouvelle recherche --}}
-            <form action="{{ route('client.search') }}" method="GET" class="srp-search-bar">
+            {{-- <form action="{{ route('client.search') }}" method="GET" class="srp-search-bar">
                 @if($category) <input type="hidden" name="category" value="{{ $category }}"> @endif
                 @if($brand)    <input type="hidden" name="brand"    value="{{ $brand }}"> @endif
                 @if($sort)     <input type="hidden" name="sort"     value="{{ $sort }}"> @endif
                 <input type="text" name="q" value="{{ $query }}" placeholder="Nouvelle recherche...">
                 <button type="submit">Rechercher</button>
-            </form>
+            </form> --}}
+            
+					@include('frontend.hero-search')
         </div>
     </div>
 
@@ -1014,7 +1053,28 @@
             {{-- Pagination --}}
             @if($products->hasPages())
             <div class="srp-pagination">
-                {{ $products->appends(request()->query())->links() }}
+                {{-- Précédent --}}
+                @if($products->onFirstPage())
+                    <span class="srp-page-btn disabled">‹</span>
+                @else
+                    <a href="{{ $products->previousPageUrl() }}&{{ http_build_query(request()->except('page')) }}" class="srp-page-btn">‹</a>
+                @endif
+
+                {{-- Numéros de page --}}
+                @foreach($products->getUrlRange(1, $products->lastPage()) as $page => $url)
+                    @if($page == $products->currentPage())
+                        <span class="srp-page-btn active">{{ $page }}</span>
+                    @else
+                        <a href="{{ $url }}&{{ http_build_query(request()->except('page')) }}" class="srp-page-btn">{{ $page }}</a>
+                    @endif
+                @endforeach
+
+                {{-- Suivant --}}
+                @if($products->hasMorePages())
+                    <a href="{{ $products->nextPageUrl() }}&{{ http_build_query(request()->except('page')) }}" class="srp-page-btn">›</a>
+                @else
+                    <span class="srp-page-btn disabled">›</span>
+                @endif
             </div>
             @endif
 

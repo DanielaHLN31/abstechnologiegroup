@@ -276,9 +276,10 @@
     margin-top: 2px;
 }
 .modal1-price-alert span {
-    font-size: 12px;
+    font-size: 14px;
     color: #1e40af;
     line-height: 1.5;
+    font-weight: 800;
 }
 
 /* Cart section */
