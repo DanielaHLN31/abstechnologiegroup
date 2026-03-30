@@ -19,11 +19,11 @@ class DatabaseSeeder extends Seeder
             PermissionsRolesSeeder::class,
             UsersTablesSeeder::class,
             CategorySeeder::class,
-            BrandSeeder::class,           
-            ProductSeeder::class,         
-            ColorSeeder::class,             
-            ProductColorSeeder::class,      
-            ProductSpecificationSeeder::class,
+            // BrandSeeder::class,           
+            // ProductSeeder::class,         
+            // ColorSeeder::class,             
+            // ProductColorSeeder::class,      
+            // ProductSpecificationSeeder::class,
         ]);
     }
 }

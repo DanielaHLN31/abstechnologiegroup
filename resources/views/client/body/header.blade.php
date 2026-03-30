@@ -68,9 +68,9 @@
 								<a href="{{ route('client.product') }}">Boutique</a>
 							</li>
 
-							<li class=" {{ request()->routeIs('client.new') ? 'active-menu' : '' }}">
+							{{-- <li class=" {{ request()->routeIs('client.new') ? 'active-menu' : '' }}">
 								<a href="{{ route('client.new') }}">Nouveautés</a>
-							</li>
+							</li> --}}
 
 							<li class="{{ request()->routeIs('client.about') ? 'active-menu' : '' }}">
 								<a href="{{ route('client.about') }}">À propos</a>
@@ -110,7 +110,7 @@
 			<!-- Logo mobile -->		
 			<div class="logo-mobile">
 				<a href="{{ route('client.index') }}">
-					<img src="{{ asset('frontend/images/icons/logo-01.png') }}" alt="Logo">
+					<img src="{{ asset('frontend/images/icons/logo.png') }}" alt="Logo">
 				</a>
 			</div>
 
@@ -195,11 +195,11 @@
 				<li>
 					<a href="{{ route('client.product') }}">Boutique</a>
 				</li>
-				<li>
+				{{-- <li>
 					<a href="{{ route('client.new') }}" class="rs1">Nouveautés</a>
-				</li>
+				</li> --}}
 				<li>
-					{{-- <a href="{{ route('client.about') }}">À propos</a> --}}
+					<a href="{{ route('client.about') }}">À propos</a>
 				</li>
 				<li>
 					<a href="{{ route('client.contact') }}">Contact</a>
@@ -222,4 +222,6 @@
 				</form>
 			</div>
 		</div>
+
+		
 	</header>

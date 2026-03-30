@@ -262,11 +262,9 @@
                             <tr>
                                 <td colspan="3" class="text-end">Livraison</td>
                                 <td class="text-end">
-                                    @if($order->shipping_cost == 0)
-                                        <span class="text-success fw-semibold">Gratuite</span>
-                                    @else
-                                        {{ number_format($order->shipping_cost, 0, ',', ' ') }} FCFA
-                                    @endif
+                                    <span style="color:#856404;font-weight:600;font-size:12px">
+                                        À régler au livreur
+                                    </span>
                                 </td>
                             </tr>
                             <tr class="fw-bold fs-6">

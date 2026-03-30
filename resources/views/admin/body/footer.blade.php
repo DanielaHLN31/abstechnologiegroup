@@ -8,10 +8,10 @@
                     document.write(new Date().getFullYear());
                 </script>
                 , réalisé par
-                <a href="https://grpcaseco.com"
+                <a href="{{ route('client.index') }}"
                     target="_blank"
                     class="footer-link text-primary fw-medium">
-                    ABS TECHNOLOGIE
+                    ABS TECHNOLOGIE Group
                 </a>
             </div>
             {{-- <div class="d-none d-lg-inline-block">

@@ -13,14 +13,14 @@
                     <div data-repeater-list="group-a">
                         <div data-repeater-item>
                             <!-- Bouton retirer -->
-                            <div style="display: flex; justify-content: flex-end;">
+                            {{-- <div style="display: flex; justify-content: flex-end;">
                                 <div class="d-flex align-items-center mb-0">
                                     <button class="btn btn-label-danger" data-repeater-delete>
                                         <i class="ti ti-x ti-xs me-1"></i>
                                         <span class="align-middle">Retirer</span>
                                     </button>
                                 </div>
-                            </div>
+                            </div> --}}
                             
                             <!-- Informations de base -->
                             <div class="row g-2">
@@ -114,7 +114,7 @@
                                 </span>
                               </div>
                             </div>
-                            <div class="comment-editor border-0 pb-4" id="ecommerce-category-description"></div>
+                            <div class="comment-editor border-0 pb-4 quill-editor-container" id="ecommerce-category-description"></div>
                           </div>
                         </div>
                             
@@ -158,7 +158,7 @@
                                             <div class="nested-template" style="display:none !important">
                                                 <div class="nested-item color-item mb-3 border rounded p-2">
                                                     <div class="row g-2 align-items-end color-fields-row">
-                                                        <div class="col-md-3">
+                                                        {{-- <div class="col-md-3">
                                                             <label class="form-label small">Couleur existante</label>
                                                             <select
                                                                 data-nested-name="[__IDX__][id]"
@@ -170,8 +170,8 @@
                                                                     </option>
                                                                 @endforeach
                                                             </select>
-                                                        </div>
-                                                        <div class="col-md-4">
+                                                        </div> --}}
+                                                        <div class="col-md-6">
                                                             <label class="form-label small">Couleur personnalisée</label>
                                                             <div class="d-flex gap-2 align-items-center">
                                                                 <input
@@ -189,7 +189,7 @@
                                                                 />
                                                             </div>
                                                         </div>
-                                                        <div class="col-md-3">
+                                                        <div class="col-md-4">
                                                             <label class="form-label small">Stock pour cette couleur</label>
                                                             <input
                                                                 type="number"
@@ -305,14 +305,14 @@
                     </div>
                     
                     <!-- Bouton pour ajouter un autre produit -->
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 20px">
+                    {{-- <div style="display: flex; justify-content: space-between; margin-bottom: 20px">
                         <div>
                             <button type="button" class="btn btn-warning" data-repeater-create>
                                 <i class="ti ti-plus me-1"></i>
                                 Ajouter un autre produit
                             </button>
                         </div>
-                    </div>
+                    </div> --}}
                     
                     <!-- Boutons d'action -->
                     <div style="display: flex; justify-content: flex-end;">

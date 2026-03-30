@@ -11,6 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
     
 	<link rel="stylesheet" type="text/css" href="{{ asset('frontend/css/styles.css') }}">
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 
@@ -19,25 +20,99 @@
 			background-color: white !important;
 		}
 	</style>
+
+   
+
 </head>
 
-<body>
+<body class="animsition">
     <!-- Navigation -->
     @include('client.body.header')
 
     <!-- Hero Section -->
 
-
-    
-
-
 	@include('frontend.modal')
 	<!-- Title page -->
-	<section class="bg-img1 txt-center p-lr-15 p-tb-92 m-t-150" style="background-image: url('{{ asset('frontend/images/bg-02.jpg') }}');">
-		<h2 class="ltext-105 cl0 txt-center">
-			A propos
-		</h2>
-	</section>	
+	
+<div class="ab-hero">
+    <div class="ab-hero__inner">
+
+        <div class="ab-hero__body">
+
+            {{-- Gauche --}}
+            <div class="ab-hero__left">
+
+                <h1 class="ab-hero__title">
+                    ABS <span>Technologie</span><br>Group
+                </h1>
+
+                <p class="ab-hero__desc">
+                    Distributeur agréé Samsung et acteur majeur de la tech au Bénin.
+                    Smartphones, électroménager, solutions entreprises —
+                    nous accompagnons particuliers et professionnels depuis plus de deux décennies.
+                </p>
+
+                {{-- Badges partenaires --}}
+                <div class="ab-hero__partners">
+                    <span class="ab-hero__partner-label">Partenaires</span>
+                    <div class="ab-hero__partner-badge">
+                        <span class="badge-dot" style="background:#1428A0"></span>
+                        SAMSUNG
+                    </div>
+                </div>
+
+            </div>
+
+            {{-- Droite : stats --}}
+            <div class="ab-hero__stats">
+                <div class="ab-hero__stat">
+                    <span class="ab-hero__stat-val">20<span class="ab-hero__stat-unit">+</span></span>
+                    <span class="ab-hero__stat-lbl">Années d'expérience</span>
+                </div>
+                <div class="ab-hero__stat">
+                    <span class="ab-hero__stat-val">10K<span class="ab-hero__stat-unit">+</span></span>
+                    <span class="ab-hero__stat-lbl">Clients satisfaits</span>
+                </div>
+                <div class="ab-hero__stat">
+                    <span class="ab-hero__stat-val">100<span class="ab-hero__stat-unit">%</span></span>
+                    <span class="ab-hero__stat-lbl">Produits authentiques</span>
+                </div>
+                <div class="ab-hero__stat">
+                    <span class="ab-hero__stat-val">24<span class="ab-hero__stat-unit">/7</span></span>
+                    <span class="ab-hero__stat-lbl">Support disponible</span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    {{-- Barre de navigation ancres --}}
+    <nav class="ab-hero__nav">
+        <div class="ab-hero__nav-inner">
+
+            <a href="#apropos" class="ab-hero__nav-link active">
+                <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+                Notre histoire
+            </a>
+
+            <a href="#services" class="ab-hero__nav-link">
+                <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
+                Services
+            </a>
+
+            <a href="#partenaires" class="ab-hero__nav-link">
+                <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                Partenaires
+            </a>
+
+            <a href="#galerie" class="ab-hero__nav-link">
+                <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                Galerie
+            </a>
+
+        </div>
+    </nav>
+</div>	
     <!-- À Propos Section -->
     <section class="about" id="apropos">
         <div class="container">
@@ -112,7 +187,7 @@
     </section>
 
 
-        <!-- Services Section -->
+    <!-- Services Section -->
     <section class="services" id="services">
         <div class="container">
             <div class="section-header">
@@ -225,7 +300,7 @@
                     </div>
                 </div>
 
-                <div class="partner-card orange-card" data-aos="zoom-in" data-delay="200">
+                {{-- <div class="partner-card orange-card" data-aos="zoom-in" data-delay="200">
                     <div class="partner-badge">Meilleures Services</div>
                     <div class="partner-logo">
                         <div class="orange-logo">Orange</div>
@@ -242,7 +317,7 @@
                             <div class="stat-label">Possibilités</div>
                         </div>
                     </div>
-                </div>
+                </div> --}}
             </div>
         </div>
     </section>
@@ -265,7 +340,7 @@
                 <div class="gallery-item x-large" data-aos="fade-up" data-delay="0">
                     <div class="gallery-image">
                         <img 
-                            src="assets/images/3.jpg" 
+                            src="{{ asset('frontend/images/3.jpg') }}" 
                             alt="Showroom ABS Technologie - Extérieur"
                             loading="lazy"
                             class="gallery-img"
@@ -283,7 +358,7 @@
                 <div class="gallery-item large" data-aos="fade-up" data-delay="200">
                     <div class="gallery-image">
                         <img 
-                            src="assets/images/4.jpeg" 
+                            src="{{ asset('frontend/images/44.jpeg') }}" 
                             alt="Intérieur du showroom ABS Technologie"
                             loading="lazy"
                             class="gallery-img"
@@ -301,7 +376,7 @@
                 <div class="gallery-item" data-aos="fade-up" data-delay="100">
                     <div class="gallery-image">
                         <img 
-                            src="assets/images/2.jpg" 
+                            src="{{ asset('frontend/images/2.jpg') }}" 
                             alt="Smartphones Samsung Galaxy"
                             loading="lazy"
                             class="gallery-img"
@@ -319,7 +394,7 @@
                 <div class="gallery-item" data-aos="fade-up" data-delay="300">
                     <div class="gallery-image">
                         <img 
-                            src="assets/images/6.png" 
+                            src="{{ asset('frontend/images/66.png') }}" 
                             alt="Téléviseurs Samsung QLED et OLED"
                             loading="lazy"
                             class="gallery-img"
@@ -337,7 +412,7 @@
                 <div class="gallery-item" data-aos="fade-up" data-delay="400">
                     <div class="gallery-image">
                         <img 
-                            src="assets/images/5.png" 
+                            src="{{ asset('frontend/images/55.png') }}" 
                             alt="Pour faire bon vivre chez vous !"
                             loading="lazy"
                             class="gallery-img"
@@ -355,7 +430,7 @@
                 <div class="gallery-item" data-aos="fade-up" data-delay="500">
                     <div class="gallery-image">
                         <img 
-                            src="assets/images/111.png" 
+                            src="{{ asset('frontend/images/111.png') }}" 
                             alt="Équipe ABS Technologie"
                             loading="lazy"
                             class="gallery-img"
@@ -374,7 +449,7 @@
                 <div class="gallery-item" data-aos="fade-up" data-delay="500">
                     <div class="gallery-image">
                         <img 
-                            src="assets/images/7.png" 
+                            src="{{ asset('frontend/images/77.png') }}" 
                             alt="Équipe ABS Technologie"
                             loading="lazy"
                             class="gallery-img"

@@ -1,9 +1,194 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<title>Accueil ABS-TECHNOLOGIE</title>
-		@include('client.body.head')
-	</head>
+<head>
+	<title>Accueil ABS-TECHNOLOGIE</title>
+	@include('client.body.head')
+		
+
+        <!-- Icon Font Stylesheet -->
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"/>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+        <!-- Libraries Stylesheet -->
+        <link href="{{ asset('frontend/lib/lightbox/css/lightbox.min.css') }}" rel="stylesheet">
+        <link href="{{ asset('frontend/lib/owlcarousel/assets/owl.carousel.min.css') }}" rel="stylesheet">
+
+
+        <!-- Customized Bootstrap Stylesheet -->
+        <link href="{{ asset('frontend/css/bootstrap.min.css') }}" rel="stylesheet">
+	
+	<style>
+		@media (max-width: 768px) {
+			.hero-header {
+				max-height: none !important;
+				padding: 20px 0 30px !important;
+			}
+			.hero-header .display-4 {
+				font-size: 1.6rem;
+			}
+			.hero-header .position-relative.mx-auto input,
+			.hero-header .position-relative.mx-auto button {
+				font-size: 14px;
+				padding: 10px 14px;
+			}
+			/* Cache le carousel sur très petit écran */
+			.hero-header .col-md-12.col-lg-5 {
+				display: none;
+			}
+		}
+
+		@media (max-width: 576px) {
+			.hero-header .position-relative.mx-auto {
+				display: flex;
+				flex-direction: column;
+				gap: 8px;
+			}
+			.hero-header .position-relative.mx-auto input {
+				width: 100% !important;
+			}
+			.hero-header .position-relative.mx-auto button {
+				position: static !important;
+				width: 100%;
+				border-radius: 4px;
+				height: auto !important;
+			}
+		}
+
+		@media (max-width: 600px) {
+			.abs-banner__card {
+				min-height: 200px;
+				flex-direction: column;
+			}
+			.abs-banner__img-wrap {
+				height: 210px;
+				position: relative;
+			}
+			.abs-banner__content {
+				margin-top: 0;
+				max-width: 75%;
+				padding: 16px;
+			}
+			.abs-banner__cta {
+				opacity: 1;
+				transform: none;
+				visibility: visible;
+				padding: 5px 10px;
+			    font-size: 11px;
+			}
+
+			.abs-marquee__item {
+				padding: 0 10px;
+			}
+
+
+		}
+
+		@media (max-width: 480px) {
+			.ps-grid {
+				grid-template-columns: repeat(1fr);
+				gap: 12px;
+				/* padding: 0 4px; */
+			}
+			/* .ps-card-img { height: 150px; }
+			.ps-card-body { padding: 10px 12px 14px; }
+			.ps-card-name { font-size: 13px; }
+			.ps-price-main { font-size: 14px; }
+			.ps-add-btn { padding: 7px 10px; font-size: 11px; } */
+			}
+
+			@media (max-width: 320px) {
+			.ps-grid {
+				grid-template-columns: 1fr;
+			}
+		}
+
+		@media (max-width: 576px) {
+			.ps-filters {
+				justify-content: flex-start;
+				overflow-x: auto;
+				flex-wrap: nowrap;
+				padding-bottom: 8px;
+				/* Scrollable Montserrattal */
+				-webkit-overflow-scrolling: touch;
+			}
+			.ps-filter-btn {
+				flex-shrink: 0;
+				font-size: 12px;
+				padding: 7px 14px;
+			}
+		}
+	</style>
+
+	<style>
+		
+			/*** Hero Header ***/
+			.hero-header {
+				background: linear-gradient(rgba(248, 223, 173, 0.1), rgba(248, 223, 173, 0.1)), url('{{ asset('frontend/images/bg-3.png') }}');
+				background-position: center center;
+				background-repeat: no-repeat;
+				background-size: cover;
+				/* height: 500px !important; */
+			}
+
+			.carousel-item {
+				position: relative;
+			}
+
+			.carousel-item a {
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%, -50%);
+				font-size: 25px;
+				background: linear-gradient(rgba(255, 181, 36, 0.7), rgba(255, 181, 36, 0.7));
+			}
+
+			.carousel-control-next,
+			.carousel-control-prev {
+				width: 48px;
+				height: 48px;
+				border-radius: 48px;
+				border: 1px solid var(--bs-white);
+				background: var(--bs-primary);
+				position: absolute;
+				top: 50%;
+				transform: translateY(-50%);
+			}
+
+			.carousel-control-next {
+				margin-right: 20px;
+			}
+
+			.carousel-control-prev {
+				margin-left: 20px;
+			}
+
+			.page-header {
+				position: relative;
+				background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('{{ asset('frontend/images/bg-3.png') }}');
+				background-position: center center;
+				background-repeat: no-repeat;
+				background-size: cover;
+			}
+
+			@media (min-width: 992px) {
+				.hero-header,
+				.page-header {
+					margin-top: 80px !important;
+				}
+			}
+
+			/* @media (max-width: 920px) {
+				.hero-header,
+				.page-header {
+					margin-top: 97px !important;
+				}
+			} */
+			/*** Hero Header end ***/
+
+	</style>
+
+</head>
 
 <body class="animsition">
 	<!-- Header -->
@@ -17,377 +202,486 @@
 
 
 
-		@include('frontend.modal')
+	@include('frontend.modal')
 
-	<!-- Slider -->
-	<section class="section-slide">
-		<div class="wrap-slick1">
-			<div class="slick1">
-				<!-- Slide 1 - Téléphonie -->
-				<div class="item-slick1" style="background-image: url({{ asset('frontend/images/slide-1.png') }});">
-					<div class="container h-full">
-						<div class="flex-col-l-m h-full p-t-100 p-b-30 respon5">
-							<div class="layer-slick1 animated visible-false" data-appear="fadeInDown" data-delay="0">
-								<span class="ltext-101 cl2 respon2">
-									Téléphonie Mobile
-								</span>
-							</div>
-								
-							<div class="layer-slick1 animated visible-false" data-appear="fadeInUp" data-delay="800">
-								<h2 class="ltext-201 cl2 p-t-19 p-b-43 respon1">
-									Smartphones Samsung
-								</h2>
-								<p class="stext-113 cl2 p-b-30">
-									Samsung Galaxy Z Fold5, Samsung Galaxy S24 Ultra et bien plus
-								</p>
-							</div>
-								
-							<div class="layer-slick1 animated visible-false" data-appear="zoomIn" data-delay="1600">
-								<a href="{{ route('client.product', ['category' => 'telephonie']) }}" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04">
-									Découvrir
-								</a>
-							</div>
-						</div>
-					</div>
+	<!-- Hero Start -->
+	<div class="container-fluid py-5 hero-header" style="max-height: 500px">
+		<div class="container py-5">
+			<div class="row g-5 align-items-center">
+
+				{{-- Texte à gauche --}}
+				<div class="col-md-12 col-lg-7" style="margin-top: 0px !important">
+					<h4 class="mb-3 text-secondary">Technologie & Innovation</h4>
+					<h1 class="mb-5 display-4 text-primary">
+						Smartphones, Informatique &amp; Électroménager
+					</h1>
+					@include('frontend.hero-search')
 				</div>
 
-				<!-- Slide 2 - Informatique -->
-				<div class="item-slick1" style="background-image: url({{ asset('frontend/images/slide-4.png') }});">
-					<div class="container h-full">
-						<div class="flex-col-l-m h-full p-t-100 p-b-30 respon5">
+				{{-- Carousel à droite - sans cadre --}}
+				<div class="col-md-12 col-lg-5" style="margin-top: 0px !important">
+					<div id="carouselId" class="carousel slide" data-bs-ride="carousel">
+						<div class="carousel-inner" role="listbox">
 
-							<div class="layer-slick1 animated visible-false" data-appear="rotateInDownLeft" data-delay="0">
-								<span class="ltext-101 cl2 respon2">
-									Informatique
-								</span>
+							<div class="carousel-item active">
+								<img src="{{ asset('frontend/images/slide1.png') }}" 
+									class="img-fluid w-100" 
+									style="object-fit: contain; max-height: 500px;"
+									alt="Téléphonie Mobile">
 							</div>
-								
-							<div class="layer-slick1 animated visible-false" data-appear="rotateInUpRight" data-delay="800">
-								<h2 class="ltext-201 cl2 p-t-19 p-b-43 respon1">
-									Matériels informatiques
-								</h2>
-								<p class="stext-113 cl2 p-b-30">
-									Découvrez nos Ordinateurs Portables & Accessoires de qualité.
-								</p>
+
+							<div class="carousel-item">
+								<img src="{{ asset('frontend/images/slide2.png') }}" 
+									class="img-fluid special w-100" 
+									style="object-fit: contain; max-height: 500px;"
+									alt="Informatique" style="margin-top: 0px !important">
 							</div>
-								
-							<div class="layer-slick1 animated visible-false" data-appear="rotateIn" data-delay="1600">
-								<a href="{{ route('client.product') }}" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04">
-									Voir les Produits
-								</a>
+
+							<div class="carousel-item">
+								<img src="{{ asset('frontend/images/slide3.png') }}" 
+									class="img-fluid w-100" 
+									style="object-fit: contain; max-height: 500px;"
+									alt="Électroménager">
+							</div>
+
+							<div class="carousel-item">
+								<img src="{{ asset('frontend/images/slide5.png') }}" 
+									class="img-fluid w-100" 
+									style="object-fit: contain; max-height: 500px;"
+									alt="Support Technique">
 							</div>
 
 						</div>
+
+						{{-- <button class="carousel-control-prev" type="button" 
+								data-bs-target="#carouselId" data-bs-slide="prev">
+							<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+							<span class="visually-hidden">Précédent</span>
+						</button>
+						<button class="carousel-control-next" type="button" 
+								data-bs-target="#carouselId" data-bs-slide="next">
+							<span class="carousel-control-next-icon" aria-hidden="true"></span>
+							<span class="visually-hidden">Suivant</span>
+						</button> --}}
 					</div>
 				</div>
 
-				<!-- Slide 3 - Électronique / Électroménager -->
-				<div class="item-slick1" style="background-image: url({{ asset('frontend/images/slide-2.png') }});">
-					<div class="container h-full">
-						<div class="flex-col-l-m h-full p-t-100 p-b-30 respon5">
-							<div class="layer-slick1 animated visible-false" data-appear="rollIn" data-delay="0">
-								<span class="ltext-101 cl2 respon2">
-									Électroménager
-								</span>
-							</div>
-								
-							<div class="layer-slick1 animated visible-false" data-appear="lightSpeedIn" data-delay="800">
-								<h2 class="ltext-201 cl2 p-t-19 p-b-43 respon1">
-									Équipements Domestiques
-								</h2>
-								<p class="stext-113 cl2 p-b-30">
-									Réfrigérateurs, machines à laver, climatiseurs
-								</p>
-							</div>
-								
-							<div class="layer-slick1 animated visible-false" data-appear="slideInUp" data-delay="1600">
-								<a href="{{ route('client.product', ['category' => 'electromenager']) }}" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04">
-									Voir les Promos
-								</a>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<!-- Slide 4 - Support Technique -->
-				<div class="item-slick1" style="background-image: url({{ asset('frontend/images/slide-3.png') }});">
-					<div class="container h-full">
-						<div class="flex-col-l-m h-full p-t-100 p-b-30 respon5">
-							<div class="layer-slick1 animated visible-false" data-appear="rotateInDownLeft" data-delay="0">
-								<span class="ltext-101 cl2 respon2">
-									Support Technique
-								</span>
-							</div>
-								
-							<div class="layer-slick1 animated visible-false" data-appear="rotateInUpRight" data-delay="800">
-								<h2 class="ltext-201 cl2 p-t-19 p-b-43 respon1">
-									Assistance & Réparation
-								</h2>
-								<p class="stext-113 cl2 p-b-30">
-									Service après-vente, réparation, maintenance
-								</p>
-							</div>
-								
-							<div class="layer-slick1 animated visible-false" data-appear="rotateIn" data-delay="1600">
-								<a href="{{ route('client.contact') }}" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04">
-									Demander de l'Aide
-								</a>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				
 			</div>
 		</div>
-	</section>
+	</div>
+	<!-- Hero End -->
 
-
-	<!-- Banner -->
-	<div class="sec-banner bg0 p-t-80 p-b-50">
-		<div class="container">
-			<div class="row">
-				@foreach($categories->take(3) as $index => $category)
-					@php
-						// Images différentes selon l'index
-						$bannerImages = [
-							0 => '5.png',
-							1 => '6.png', 
-							2 => '7.png'
-						];
-						
-						// Définir des slogans différents pour chaque catégorie
-						$slogans = [
-							0 => 'Spring 2018',
-							1 => 'Spring 2018', 
-							2 => 'New Trend'
-						];
-						
-						// Couleurs de fond différentes (optionnel)
-						$overlayColors = [
-							0 => 'rgba(0,0,0,0.3)',
-							1 => 'rgba(0,0,0,0.2)',
-							2 => 'rgba(0,0,0,0.25)'
-						];
-					@endphp
-					
-					<div class="col-md-6 col-xl-4 p-b-30 m-lr-auto">
-						<!-- Block1 -->
-						<div class="block1 wrap-pic-w">
-							@if($category->image)
-								<img src="{{ asset('storage/' . $category->image) }}" 
-									alt="{{ $category->name }}"
-									style="min-height: 250px; object-fit: cover;">
-							@else
-								<img src="{{ asset('frontend/images/' . $bannerImages[$index]) }}" 
-									alt="{{ $category->name }}">
-							@endif
-
-							<a href="{{ route('client.product', ['category' => $category->id]) }}" 
-							class="block1-txt ab-t-l s-full flex-col-l-sb p-lr-38 p-tb-34 trans-03 respon3">
-								<div class="block1-txt-child1 flex-col-l">
-									<span class="block1-name ltext-102 trans-04 p-b-8">
-										{{ $category->name }}
-									</span>
-
-									<span class="block1-info stext-102 trans-04" style="max-width: 210px">
-										{{ $category->description ?? $slogans[$index] }}
-									</span>
-								</div>
-
-								<div class="block1-txt-child2 p-b-4 trans-05">
-									<div class="block1-link stext-101 cl0 trans-09">
-										Commander <i class="fa fa-arrow-right m-l-8"></i>
-									</div>
-								</div>
-							</a>
-						</div>
-					</div>
-				@endforeach
-			</div>
+		
+	{{-- ══════════════ MARQUEE ══════════════ --}}
+	<div class="abs-marquee">
+		<div class="abs-marquee__track">
+			@foreach($categories->take(6) as $cat)
+				<span class="abs-marquee__item">{{ $cat->name }} <span class="abs-marquee__sep">·</span></span>
+			@endforeach
+			<span class="abs-marquee__item">Support Technique <span class="abs-marquee__sep">·</span></span>
+			<span class="abs-marquee__item">Livraison Cotonou <span class="abs-marquee__sep">·</span></span>
+			{{-- duplicate for infinite loop --}}
+			@foreach($categories->take(6) as $cat)
+				<span class="abs-marquee__item">{{ $cat->name }} <span class="abs-marquee__sep">·</span></span>
+			@endforeach
+			<span class="abs-marquee__item">Support Technique <span class="abs-marquee__sep">·</span></span>
+			<span class="abs-marquee__item">Livraison Cotonou <span class="abs-marquee__sep">·</span></span>
 		</div>
 	</div>
 
 
-	<!-- Product -->
-	<section class="bg0 p-t-23 p-b-140">
-		<div class="container">
-			<div class="p-b-10">
-				<h3 class="ltext-103 cl5">
-					Product Overview
-				</h3>
+	
+	<!-- Banner Section avec cartes uniformes -->
+	<section class="abs-banner">
+		<!-- Header -->
+		<div class="abs-banner__head">
+			<div class="abs-banner__pill">
+				<span class="abs-banner__pill-dot"></span>
+				Nos univers produits
 			</div>
-			<div class="flex-w flex-sb-m p-b-52">
-				<div class="flex-w flex-l-m filter-tope-group m-tb-10">
-					<button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5 how-active1" data-filter="*">
-						All Products
-					</button>
-					
-					@foreach($categories->take(3) as $category)
-					<button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" data-filter=".cat-{{ $category->id }}">
-						{{ $category->name }}
-					</button>
-					@endforeach
-				</div>
+			<h2 class="abs-banner__title">Explorez nos <span>catégories</span></h2>
+			<p class="abs-banner__sub">Des produits certifiés, livrés rapidement au cœur de Cotonou</p>
+		</div>
 
-			
-			@include('frontend.filter')
-			<div class="row isotope-grid">
-				@forelse($products->take(12) as $product)
-    				<div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item cat-{{ $product->category_id }}"
-						data-brand-id="{{ $product->brand_id }}"
-						data-colors="{{ json_encode($product->colors) }}">
-
-					<!-- Block2 -->
-					<div class="block2">
-						<div class="block2-pic hov-img0">
-							@if($product->images->isNotEmpty())
-								<img src="{{ asset('storage/' . $product->images->first()->image_path) }}" alt="{{ $product->name }}">
-							@else
-								<img src="{{ asset('frontend/images/no-image.jpg') }}" alt="No Image">
-							@endif
-
-							<a href="#" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1" 
-								data-product-id="{{ $product->id ?? '' }}"
-								data-product-name="{{ $product->name ?? '' }}"
-								data-product-price="{{ $product->price ?? '' }}"
-								data-product-description="{{ $product->description ?? '' }}"
-								data-product-images="{{ json_encode($product->images) }}"
-								data-product-colors="{{ json_encode($product->colors) }}"
-								data-product-specs="{{ json_encode($product->specifications) }}">
-									Voir
-							</a>
+		<!-- Grille cartes - largeur égale -->
+		<div class="abs-banner__grid">
+			@foreach($categories->take(3) as $index => $category)
+			<a href="{{ route('client.product', ['category' => $category->id]) }}" class="abs-banner__card">
+				
+				
+				<!-- Overlay bleu qui apparaît au hover -->
+				<div class="abs-banner__overlay"></div>
+				<div class="d-flex">
+					<!-- Zone image -->
+					<div class="abs-banner__img-wrap">
+						@if($category->image)
+							<img src="{{ asset('storage/' . $category->image) }}" alt="{{ $category->name }}" loading="lazy">
+						@else
+							@php $fallbacks = ['5.png', '6.png', '7.png']; @endphp
+							<img src="{{ asset('frontend/images/' . ($fallbacks[$index] ?? '5.png')) }}" alt="{{ $category->name }}" loading="lazy">
+						@endif
+					</div>
+					<!-- Contenu texte -->
+					<div class="abs-banner__content">
+						<div class="abs-banner__tag">
+							<span class="abs-banner__tag-dot"></span>
+							@php $tags = ['Smartphones & Accessoires', 'Équipements Domestiques', 'PC & Périphériques']; @endphp
+							{{ $tags[$index] ?? 'Nouveautés' }}
 						</div>
-
-						<div class="block2-txt flex-w flex-t p-t-14">
-							<div class="block2-txt-child1 flex-col-l">
-								<a href="javascript:;" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
-									{{ $product->name }}
-								</a>
-
-								<span class="stext-105 cl3">
-									@if($product->compare_price && $product->compare_price > $product->price)
-										<span class="text-decoration-line-through text-muted">{{ number_format($product->compare_price, 0, ',', ' ') }} FCFA</span>
-										<span class="text-danger ml-2">{{ number_format($product->price, 0, ',', ' ') }} FCFA</span>
-									@else
-										{{ number_format($product->price, 0, ',', ' ') }} FCFA
-									@endif
-								</span>
-								
-								@if($product->colors->isNotEmpty())
-								<div class="mt-2">
-									@foreach($product->colors->take(3) as $color)
-									<span class="d-inline-block rounded-circle mr-1" 
-										style="width: 15px; height: 15px; background-color: {{ $color->code }}; border: 1px solid #ddd;" 
-										title="{{ $color->name }}"></span>
-									@endforeach
-									@if($product->colors->count() > 3)
-									<span class="small text-muted">+{{ $product->colors->count() - 3 }}</span>
-									@endif
-								</div>
-								@endif
-							</div>
-
-							<div class="block2-txt-child2 flex-r p-t-3">
-								<a href="#" class="btn-addwish-b2 dis-block pos-relative js-addwish-b2" data-product-id="{{ $product->id }}">
-									<img class="icon-heart1 dis-block trans-04" src="{{ asset('frontend/images/icons/icon-heart-01.png') }}" alt="ICON">
-									<img class="icon-heart2 dis-block trans-04 ab-t-l" src="{{ asset('frontend/images/icons/icon-heart-02.png') }}" alt="ICON">
-								</a>
-							</div>
-						</div>
+						<h3 class="abs-banner__name">{{ $category->name }}</h3>
+						<p class="abs-banner__desc">
+							@php $descs = ['Smartphones, téléphones et accessoires de dernière génération.', 'Appareils électroménagers, climatisation et équipements domestiques.', 'Ordinateurs portables, PC de bureau et périphériques professionnels.']; @endphp
+							{{ $descs[$index] ?? ($category->description ?? 'Découvrez notre collection') }}
+						</p>
+						
+						<!-- Bouton Commander qui apparaît au hover -->
+						<span class="abs-banner__cta">
+							Commander
+							<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+								<path d="M5 12h14M12 5l7 7-7 7"/>
+							</svg>
+						</span>
 					</div>
 				</div>
-				@empty
-				<div class="col-12 text-center p-t-50 p-b-50">
-					<p class="stext-113 cl6">Aucun produit disponible pour le moment.</p>
-				</div>
-				@endforelse
-			</div>
-
-			<!-- Load more -->
-			{{-- @if($products->count() > 12) --}}
-			<div class="flex-c-m flex-w w-full p-t-45">
-				<a href="{{route('client.product')}}" class="flex-c-m stext-101 cl5 size-103 bg2 bor1 hov-btn1 p-lr-15 trans-04" id="load-more">
-					Voir tous les produits
-				</a>
-			</div>
-			{{-- @endif --}}
+			</a>
+			@endforeach
 		</div>
 	</section>
 
+
+	<!-- Product -->
+	{{-- ============================================================
+		SECTION PRODUITS
+	============================================================ --}}
+	<section class="ps-section">
+
+		{{-- Header --}}
+		<div class="ps-header">
+			<div class="ps-section-accent"></div>
+			<div class="ps-label">
+				<span class="ps-label-dot"></span>
+				Notre catalogue
+			</div>
+			<h2 class="ps-title">Nos <span>Produits</span></h2>
+			<p class="ps-subtitle">Découvrez une sélection premium de produits tech, high-end &amp; multimédia</p>
+		</div>
+
+		{{-- Filtres dynamiques (catégories depuis la BDD) --}}
+		<div class="ps-filters">
+			<button class="ps-filter-btn active" data-filter="all">
+				Tous les produits
+			</button>
+
+			@foreach($categories->take(6) as $cat)
+			<button class="ps-filter-btn" data-filter="cat-{{ $cat->id }}">
+				{{ $cat->name }}
+			</button>
+			@endforeach
+		</div>
+
+		{{-- Grille produits --}}
+		<div class="ps-grid" id="psGrid">
+
+			@forelse($products->take(12) as $product)
+			<div class="ps-card" data-cat="cat-{{ $product->category_id }}">
+
+				{{-- Zone image --}}
+				<div class="ps-card-img">
+
+					{{-- Image produit --}}
+					@if($product->images->isNotEmpty())
+						<img
+							src="{{ asset('storage/' . $product->images->first()->image_path) }}"
+							alt="{{ $product->name }}"
+							loading="lazy">
+					@else
+						<img
+							src="{{ asset('frontend/images/no-image.jpg') }}"
+							alt="{{ $product->name }}"
+							loading="lazy">
+					@endif
+
+					{{-- Badge (Promo > Nouveau > rien) --}}
+					@if($product->compare_price && $product->compare_price > $product->price)
+						@php $discount = round((1 - $product->price / $product->compare_price) * 100); @endphp
+						<span class="ps-badge badge-promo">-{{ $discount }}%</span>
+					@elseif($product->created_at->diffInDays(now()) <= 30)
+						<span class="ps-badge badge-new">Nouveau</span>
+					@elseif($product->is_featured ?? false)
+						<span class="ps-badge badge-top">Top Vente</span>
+					@endif
+
+					{{-- Bouton Favori --}}
+					<button class="ps-wish js-addwish-b2"
+							data-product-id="{{ $product->id }}"
+							title="Ajouter aux favoris">
+						<svg viewBox="0 0 24 24" width="16" height="16" fill="none"
+							stroke="#CC1B1B" stroke-width="2">
+							<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67
+									l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06
+									L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+						</svg>
+					</button>
+
+					{{-- Aperçu rapide (ouvre votre modal existant) --}}
+					<div class="ps-quickview js-show-modal1"
+						data-product-id="{{ $product->id }}"
+						data-product-name="{{ $product->name }}"
+						data-product-price="{{ $product->price }}"
+						data-product-description="{{ $product->description }}"
+						data-product-images="{{ json_encode($product->images) }}"
+						data-product-colors="{{ json_encode($product->colors) }}"
+						data-product-specs="{{ json_encode($product->specifications) }}">
+						Aperçu rapide
+					</div>
+
+				</div>{{-- /.ps-card-img --}}
+
+				{{-- Corps --}}
+				<div class="ps-card-body">
+
+					<span class="ps-card-cat">
+						{{ $product->category->name ?? 'Produit' }}
+					</span>
+
+					<div class="ps-card-name">{{ $product->name }}</div>
+
+					{{-- Pastilles couleurs --}}
+					@if($product->colors->isNotEmpty())
+					<div class="ps-card-colors">
+						@foreach($product->colors->take(4) as $color)
+						<span class="ps-color-dot"
+							style="background-color:{{ $color->code }}"
+							title="{{ $color->name }}"></span>
+						@endforeach
+						@if($product->colors->count() > 4)
+						<span style="font-size:11px;color:var(--text-muted)">
+							+{{ $product->colors->count() - 4 }}
+						</span>
+						@endif
+					</div>
+					@endif
+
+					{{-- Footer prix + panier --}}
+					<div class="ps-card-footer">
+
+						<div class="ps-price">
+							@if($product->compare_price && $product->compare_price > $product->price)
+								<span class="ps-price-old">
+									{{ number_format($product->compare_price, 0, ',', ' ') }} F
+								</span>
+							@endif
+							<span class="ps-price-main">
+								{{ number_format($product->price, 0, ',', ' ') }} F
+							</span>
+						</div>
+
+						{{-- Bouton Ajouter au panier (reprend votre logique JS existante) --}}
+						<button class="ps-add-btn abs-add-to-cart"
+								data-product-id="{{ $product->id }}"
+								data-product-name="{{ $product->name }}"
+								data-product-price="{{ $product->price }}">
+							<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+								width="13" height="13" stroke-width="2.5">
+								<path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+								<line x1="3" y1="6" x2="21" y2="6"/>
+								<path d="M16 10a4 4 0 01-8 0"/>
+							</svg>
+							Ajouter
+						</button>
+
+					</div>{{-- /.ps-card-footer --}}
+
+				</div>{{-- /.ps-card-body --}}
+
+			</div>{{-- /.ps-card --}}
+			@empty
+			<div style="grid-column:1/-1;text-align:center;padding:60px 0;color:var(--text-muted);">
+				Aucun produit disponible pour le moment.
+			</div>
+			@endforelse
+
+		</div>{{-- /.ps-grid --}}
+
+
+		{{-- Voir tous les produits --}}
+		@if($products->count() > 12)
+		<div class="ps-view-all">
+			<a href="{{ route('client.product') }}" class="ps-view-all-btn">
+				Voir tous les produits
+				<svg class="arrow" viewBox="0 0 24 24" width="16" height="16"
+					fill="none" stroke="currentColor" stroke-width="2.5">
+					<path d="M5 12h14M12 5l7 7-7 7"/>
+				</svg>
+			</a>
+		</div>
+		@endif
+
+	</section>
+
 	@include('client.body.footer')
-@include('frontend.productModal')
+	@include('frontend.productModal')
 
+	<!--===============================================================================================-->
+	<!-- 1. CHARGER JQUERY UNE SEULE FOIS (version la plus récente) -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+	<!--===============================================================================================-->
 
-<!--===============================================================================================-->	
-	<script src="{{ asset('frontend/vendor/jquery/jquery-3.2.1.min.js') }}"></script>
-<!--===============================================================================================-->
+	<!-- 2. CHARGER BOOTSTRAP (une seule version) -->
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+
+	<!--===============================================================================================-->
+	<!-- 3. CHARGER LES AUTRES PLUGINS (dans l'ordre) -->
 	<script src="{{ asset('frontend/vendor/animsition/js/animsition.min.js') }}"></script>
-<!--===============================================================================================-->
-	<script src="{{ asset('frontend/vendor/bootstrap/js/popper.js') }}"></script>
-	<script src="{{ asset('frontend/vendor/bootstrap/js/bootstrap.min.js') }}"></script>
-<!--===============================================================================================-->
 	<script src="{{ asset('frontend/vendor/select2/select2.min.js') }}"></script>
 	<script>
-		$(".js-select2").each(function(){
-			$(this).select2({
-				minimumResultsForSearch: 20,
-				dropdownParent: $(this).next('.dropDownSelect2')
-			});
-		})
+	$(".js-select2").each(function(){
+		$(this).select2({
+			minimumResultsForSearch: 20,
+			dropdownParent: $(this).next('.dropDownSelect2')
+		});
+	})
 	</script>
-<!--===============================================================================================-->
+
+	<!-- Daterangepicker -->
 	<script src="{{ asset('frontend/vendor/daterangepicker/moment.min.js') }}"></script>
 	<script src="{{ asset('frontend/vendor/daterangepicker/daterangepicker.js') }}"></script>
-<!--===============================================================================================-->
+
+	<!-- Slick Carousel (après jQuery) -->
 	<script src="{{ asset('frontend/vendor/slick/slick.min.js') }}"></script>
 	<script src="{{ asset('frontend/js/slick-custom.js') }}"></script>
-<!--===============================================================================================-->
+
+	<!-- Autres plugins -->
 	<script src="{{ asset('frontend/vendor/parallax100/parallax100.js') }}"></script>
 	<script>
-        $('.parallax100').parallax100();
+	$('.parallax100').parallax100();
 	</script>
-<!--===============================================================================================-->
+
 	<script src="{{ asset('frontend/vendor/MagnificPopup/jquery.magnific-popup.min.js') }}"></script>
 	<script>
-		$('.gallery-lb').each(function() { // the containers for all your galleries
-			$(this).magnificPopup({
-		        delegate: 'a', // the selector for gallery item
-		        type: 'image',
-		        gallery: {
-		        	enabled:true
-		        },
-		        mainClass: 'mfp-fade'
-		    });
+	$('.gallery-lb').each(function() {
+		$(this).magnificPopup({
+			delegate: 'a',
+			type: 'image',
+			gallery: {
+				enabled:true
+			},
+			mainClass: 'mfp-fade'
 		});
+	});
 	</script>
-<!--===============================================================================================-->
+
 	<script src="{{ asset('frontend/vendor/isotope/isotope.pkgd.min.js') }}"></script>
-<!--===============================================================================================-->
 	<script src="{{ asset('frontend/vendor/sweetalert/sweetalert.min.js') }}"></script>
-	
-<!--===============================================================================================-->
 	<script src="{{ asset('frontend/vendor/perfect-scrollbar/perfect-scrollbar.min.js') }}"></script>
 	<script>
-		$('.js-pscroll').each(function(){
-			$(this).css('position','relative');
-			$(this).css('overflow','hidden');
-			var ps = new PerfectScrollbar(this, {
-				wheelSpeed: 1,
-				scrollingThreshold: 1000,
-				wheelPropagation: false,
-			});
-
-			$(window).on('resize', function(){
-				ps.update();
-			})
+	$('.js-pscroll').each(function(){
+		$(this).css('position','relative');
+		$(this).css('overflow','hidden');
+		var ps = new PerfectScrollbar(this, {
+			wheelSpeed: 1,
+			scrollingThreshold: 1000,
+			wheelPropagation: false,
 		});
-	</script>
-<!--===============================================================================================-->
-	<script src="{{ asset('frontend/js/main.js') }}"></script>
-	<script src="{{ asset('frontend/js/product.js') }}"></script>
 
+		$(window).on('resize', function(){
+			ps.update();
+		})
+	});
+	</script>
+
+	<!-- Vos scripts personnalisés -->
+	<script src="{{ asset('frontend/js/main.js') }}"></script>
+
+	<!-- Autres librairies -->
+	<script src="{{ asset('frontend/lib/easing/easing.min.js') }}"></script>
+	<script src="{{ asset('frontend/lib/waypoints/waypoints.min.js') }}"></script>
+	<script src="{{ asset('frontend/lib/lightbox/js/lightbox.min.js') }}"></script>
+	<script src="{{ asset('frontend/lib/owlcarousel/owl.carousel.min.js') }}"></script>
+
+	<!-- ENFIN votre script global (contient le code du modal) -->
 	@include('frontend.global_js')
+
+	<script>
+		(function () {
+		/* Uniquement sur mobile */
+		if (window.innerWidth > 991) return;
+
+		var AUTOPLAY_MS = 4500;   /* durée par slide en millisecondes */
+
+		var track    = document.getElementById('amsTrack');
+		var dots     = document.querySelectorAll('.ams-dot');
+		var progress = document.getElementById('amsProgress');
+		var total    = dots.length;
+		var current  = 0;
+		var timer    = null;
+		var pTimer   = null;
+		var pVal     = 0;
+
+		/* ── Navigation ── */
+		function goTo(n) {
+			current = ((n % total) + total) % total;
+			track.style.transform = 'translateX(-' + (current * 100) + '%)';
+			dots.forEach(function (d, i) {
+			d.classList.toggle('active', i === current);
+			});
+			startProgress();
+		}
+
+		/* ── Barre de progression ── */
+		function startProgress() {
+			clearInterval(pTimer);
+			clearTimeout(timer);
+			pVal = 0;
+			progress.style.transition = 'none';
+			progress.style.width = '0%';
+
+			var step = 100 / (AUTOPLAY_MS / 80);
+			pTimer = setInterval(function () {
+			pVal += step;
+			progress.style.width = Math.min(pVal, 100) + '%';
+			if (pVal >= 100) {
+				clearInterval(pTimer);
+				timer = setTimeout(function () { goTo(current + 1); }, 80);
+			}
+			}, 80);
+		}
+
+		/* ── Dots cliquables ── */
+		dots.forEach(function (d) {
+			d.addEventListener('click', function () {
+			goTo(parseInt(d.getAttribute('data-index')));
+			});
+		});
+
+		/* ── Swipe tactile ── */
+		var touchStartX = 0;
+		var touchStartY = 0;
+		var dragging    = false;
+
+		track.addEventListener('touchstart', function (e) {
+			touchStartX = e.touches[0].clientX;
+			touchStartY = e.touches[0].clientY;
+			dragging = true;
+		}, { passive: true });
+
+		track.addEventListener('touchend', function (e) {
+			if (!dragging) return;
+			dragging = false;
+			var dx = e.changedTouches[0].clientX - touchStartX;
+			var dy = e.changedTouches[0].clientY - touchStartY;
+			/* swipe Montserrattal uniquement (évite conflit scroll vertical) */
+			if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 40) {
+			dx < 0 ? goTo(current + 1) : goTo(current - 1);
+			}
+		}, { passive: true });
+
+		/* ── Démarrage ── */
+		goTo(0);
+
+		})();
+	</script>
+
 
 </body>
 </html>

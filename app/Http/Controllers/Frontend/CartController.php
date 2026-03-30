@@ -10,29 +10,30 @@ use Illuminate\Support\Facades\Auth;
 
 class CartController extends Controller
 {
+    /**
+     * Constructeur pour protéger les routes
+     */
+    // public function __construct()
+    // {
+    //     // Protéger toutes les méthodes sauf si nécessaire
+    //     $this->middleware('auth')->except(['count', 'sidebar']);
+    // }
+
     // ================================================================
-    // HELPERS — identifier le panier (user connecté ou session)
+    // HELPERS — identifier le panier (uniquement utilisateur connecté)
     // ================================================================
 
     private function cartQuery()
     {
-        if (Auth::check()) {
-            return CartItem::where('user_id', Auth::id());
-        }
-        return CartItem::where('session_id', session()->getId());
+        // Plus de gestion de session, uniquement utilisateur connecté
+        return CartItem::where('user_id', Auth::id());
     }
 
-    private function cartOwner(): array
-    {
-        if (Auth::check()) {
-            return ['user_id' => Auth::id(), 'session_id' => null];
-        }
-        return ['user_id' => null, 'session_id' => session()->getId()];
-    }
+    // Plus besoin de cartOwner() car on utilise Auth uniquement
 
     /**
-     * Fusionner le panier session → panier utilisateur après connexion.
-     * À appeler dans le LoginController après authentification.
+     * Cette méthode n'est plus nécessaire car on n'utilise plus les sessions
+     * Mais on la garde pour compatibilité si appelée depuis LoginController
      */
     public static function mergeSessionCart(): void
     {
@@ -55,7 +56,7 @@ class CartController extends Controller
     }
 
     // ================================================================
-    // INDEX — page panier
+    // INDEX — page panier (déjà protégée par middleware)
     // ================================================================
 
     public function index()
@@ -70,7 +71,7 @@ class CartController extends Controller
     }
 
     // ================================================================
-    // ADD — ajouter un produit
+    // ADD — ajouter un produit (protégé par middleware)
     // ================================================================
 
     public function add(Request $request)
@@ -106,11 +107,12 @@ class CartController extends Controller
 
             $existing->update(['quantity' => $newQty]);
         } else {
-            CartItem::create(array_merge($this->cartOwner(), [
+            CartItem::create([
+                'user_id'    => Auth::id(),
                 'product_id' => $product->id,
                 'color_id'   => $colorId,
                 'quantity'   => min($quantity, $product->stock_quantity),
-            ]));
+            ]);
         }
 
         $cartCount = $this->cartQuery()->sum('quantity');
@@ -122,7 +124,7 @@ class CartController extends Controller
     }
 
     // ================================================================
-    // UPDATE — modifier la quantité
+    // UPDATE — modifier la quantité (protégé par middleware)
     // ================================================================
 
     public function update(Request $request)
@@ -153,7 +155,7 @@ class CartController extends Controller
     }
 
     // ================================================================
-    // REMOVE — supprimer un article
+    // REMOVE — supprimer un article (protégé par middleware)
     // ================================================================
 
     public function remove(Request $request)
@@ -177,7 +179,7 @@ class CartController extends Controller
     }
 
     // ================================================================
-    // CLEAR — vider le panier
+    // CLEAR — vider le panier (protégé par middleware)
     // ================================================================
 
     public function clear()
@@ -188,47 +190,57 @@ class CartController extends Controller
     }
 
     // ================================================================
-    // COUNT — pour le badge header (endpoint AJAX optionnel)
+    // COUNT — pour le badge header (accessible sans authentification)
     // ================================================================
 
     public function count()
     {
-        return response()->json(['count' => $this->cartQuery()->sum('quantity')]);
+        if (Auth::check()) {
+            return response()->json(['count' => $this->cartQuery()->sum('quantity')]);
+        }
+        return response()->json(['count' => 0]);
     }
 
-    
-/**
- * Endpoint AJAX pour le sidebar panier du header.
- * Route : GET /client/cart/sidebar
- */
-public function sidebar()
-{
-    $cartItems = $this->cartQuery()
-        ->with(['product.images', 'color'])
-        ->get();
+    /**
+     * Endpoint AJAX pour le sidebar panier du header.
+     * Accessible sans authentification (retourne panier vide si non connecté)
+     */
+    public function sidebar()
+    {
+        if (!Auth::check()) {
+            return response()->json([
+                'items' => [],
+                'total' => 0,
+                'count' => 0,
+            ]);
+        }
 
-    $items = $cartItems->map(function ($item) {
-        return [
-            'id'         => $item->id,
-            'product_id' => $item->product_id,
-            'name'       => $item->product->name,
-            'price'      => $item->product->price,
-            'quantity'   => $item->quantity,
-            'image'      => $item->product->images->first()?->image_path ?? null,
-            'color'      => $item->color ? [
-                'name' => $item->color->name,
-                'code' => $item->color->code,
-            ] : null,
-        ];
-    });
+        $cartItems = $this->cartQuery()
+            ->with(['product.images', 'color'])
+            ->get();
 
-    $total = $cartItems->sum(fn($i) => $i->product->price * $i->quantity);
-    $count = $cartItems->sum('quantity');
+        $items = $cartItems->map(function ($item) {
+            return [
+                'id'         => $item->id,
+                'product_id' => $item->product_id,
+                'name'       => $item->product->name,
+                'price'      => $item->product->price,
+                'quantity'   => $item->quantity,
+                'image'      => $item->product->images->first()?->image_path ?? null,
+                'color'      => $item->color ? [
+                    'name' => $item->color->name,
+                    'code' => $item->color->code,
+                ] : null,
+            ];
+        });
 
-    return response()->json([
-        'items' => $items,
-        'total' => $total,
-        'count' => $count,
-    ]);
-}
+        $total = $cartItems->sum(fn($i) => $i->product->price * $i->quantity);
+        $count = $cartItems->sum('quantity');
+
+        return response()->json([
+            'items' => $items,
+            'total' => $total,
+            'count' => $count,
+        ]);
+    }
 }
