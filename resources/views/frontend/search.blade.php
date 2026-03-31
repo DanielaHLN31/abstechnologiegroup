@@ -745,6 +745,9 @@
             opacity: 0.3;
             cursor: not-allowed;
         }
+        .hs-dropdown.open {
+            display: none !important;
+        }
     </style>
 </head>
 

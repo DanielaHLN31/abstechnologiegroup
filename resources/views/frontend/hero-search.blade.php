@@ -259,9 +259,6 @@
     .hs-btn { padding: 0 16px; }
     .hs-wrap { max-width: 100%; }
 }
-.hs-dropdown.open {
-		display: none !important;
-	}
 </style>
 
 {{-- ══════════════ HERO SEARCH ══════════════ --}}
