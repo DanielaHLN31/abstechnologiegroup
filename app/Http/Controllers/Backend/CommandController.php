@@ -19,23 +19,10 @@ use Carbon\Carbon;
 
 class CommandController extends Controller
 {
-    // ================================================================
-    // DASHBOARD ADMIN (existant)
-    // ================================================================
-
-    // public function dashboardVendors()
-    // {
-    //     return view('admin.index');
-    // }
 
     public function dashboardVendors()
     {
 
-// ════════════════════════════════════════════════════════════════════════════
-// DEBUG TEMPORAIRE — À coller au début de DashboardController::index()
-// Accéder à : /admin/dashboard?debug=1
-// Supprimer après diagnostic
-// ════════════════════════════════════════════════════════════════════════════
 
         if (request('debug') == 1) {
 
@@ -294,7 +281,7 @@ class CommandController extends Controller
         ));
     }
     // ================================================================
-    // GESTION DES COMMANDES — page principale (pending + processing)
+    // GESTION DES COMMANDES 
     // ================================================================
 
     public function index()
@@ -373,305 +360,305 @@ class CommandController extends Controller
     // ================================================================
 
     public function updateStatus(Request $request, $orderNumber)
-{
-    try {
-        DB::beginTransaction();
-        
-        Log::info('Tentative de mise à jour de statut', [
-            'order_number' => $orderNumber,
-            'new_status' => $request->status,
-            'user_id' => Auth::id()
-        ]);
-        
-        $order = Order::where('order_number', $orderNumber)->firstOrFail();
-        
-        // Validation spécifique pour le remboursement
-        $rules = [
-            'status' => 'required|in:pending,confirmed,processing,shipped,delivered,cancelled,refunded',
-            'notes' => 'nullable|string|max:500',
-        ];
-        
-        $messages = [];
-        
-        // Si le statut est "refunded", ajouter la validation pour la preuve
-        if ($request->status === 'refunded') {
-            $rules['refund_proof'] = 'required|image|mimes:jpeg,png,jpg,gif|max:5120';
-            $messages = [
-                'refund_proof.required' => 'La preuve de remboursement est obligatoire',
-                'refund_proof.image' => 'Le fichier doit être une image',
-                'refund_proof.mimes' => 'Le format doit être JPEG, PNG, JPG ou GIF',
-                'refund_proof.max' => 'La taille de l\'image ne doit pas dépasser 5MB'
+    {
+        try {
+            DB::beginTransaction();
+            
+            Log::info('Tentative de mise à jour de statut', [
+                'order_number' => $orderNumber,
+                'new_status' => $request->status,
+                'user_id' => Auth::id()
+            ]);
+            
+            $order = Order::where('order_number', $orderNumber)->firstOrFail();
+            
+            // Validation spécifique pour le remboursement
+            $rules = [
+                'status' => 'required|in:pending,confirmed,processing,shipped,delivered,cancelled,refunded',
+                'notes' => 'nullable|string|max:500',
             ];
-        }
-        
-        $request->validate($rules, $messages);
-        
-        // Gestion de l'upload de la preuve de remboursement
-        $refundProofPath = null;
-        if ($request->status === 'refunded' && $request->hasFile('refund_proof')) {
-            try {
-                $image = $request->file('refund_proof');
-                $fileName = 'refund_' . $orderNumber . '_' . time() . '.' . $image->getClientOriginalExtension();
-                $refundProofPath = $image->storeAs('refund_proofs', $fileName, 'public');
-                
-                Log::info('Preuve de remboursement uploadée', [
-                    'order_number' => $orderNumber,
-                    'file' => $fileName,
-                    'path' => $refundProofPath
-                ]);
-            } catch (\Exception $e) {
-                Log::error('Erreur upload preuve remboursement: ' . $e->getMessage());
-                throw new \Exception('Erreur lors de l\'upload de la preuve de remboursement');
+            
+            $messages = [];
+            
+            // Si le statut est "refunded", ajouter la validation pour la preuve
+            if ($request->status === 'refunded') {
+                $rules['refund_proof'] = 'required|image|mimes:jpeg,png,jpg,gif|max:5120';
+                $messages = [
+                    'refund_proof.required' => 'La preuve de remboursement est obligatoire',
+                    'refund_proof.image' => 'Le fichier doit être une image',
+                    'refund_proof.mimes' => 'Le format doit être JPEG, PNG, JPG ou GIF',
+                    'refund_proof.max' => 'La taille de l\'image ne doit pas dépasser 5MB'
+                ];
             }
-        }
-        
-        // Si le statut passe à "refunded", on remet le stock
-        if ($request->status === 'refunded' && $order->status !== 'refunded') {
-            foreach ($order->items as $item) {
-                $product = $item->product;
-                if ($product) {
-                    $product->increment('stock_quantity', $item->quantity);
-                    Log::info('Stock remis pour remboursement', [
-                        'product_id' => $product->id,
-                        'quantity' => $item->quantity
+            
+            $request->validate($rules, $messages);
+            
+            // Gestion de l'upload de la preuve de remboursement
+            $refundProofPath = null;
+            if ($request->status === 'refunded' && $request->hasFile('refund_proof')) {
+                try {
+                    $image = $request->file('refund_proof');
+                    $fileName = 'refund_' . $orderNumber . '_' . time() . '.' . $image->getClientOriginalExtension();
+                    $refundProofPath = $image->storeAs('refund_proofs', $fileName, 'public');
+                    
+                    Log::info('Preuve de remboursement uploadée', [
+                        'order_number' => $orderNumber,
+                        'file' => $fileName,
+                        'path' => $refundProofPath
                     ]);
+                } catch (\Exception $e) {
+                    Log::error('Erreur upload preuve remboursement: ' . $e->getMessage());
+                    throw new \Exception('Erreur lors de l\'upload de la preuve de remboursement');
                 }
             }
+            
+            // Si le statut passe à "refunded", on remet le stock
+            if ($request->status === 'refunded' && $order->status !== 'refunded') {
+                foreach ($order->items as $item) {
+                    $product = $item->product;
+                    if ($product) {
+                        $product->increment('stock_quantity', $item->quantity);
+                        Log::info('Stock remis pour remboursement', [
+                            'product_id' => $product->id,
+                            'quantity' => $item->quantity
+                        ]);
+                    }
+                }
+            }
+            
+            // Préparer les données de mise à jour
+            $updateData = [
+                'status' => $request->status,
+                'notes' => $request->notes,
+            ];
+            
+            // Si c'est un remboursement, ajouter les informations
+            if ($request->status === 'refunded') {
+                $updateData['refund_proof'] = $refundProofPath;
+                $updateData['refunded_at'] = now();
+                $updateData['payment_status'] = 'refunded'; // Optionnel
+            }
+            
+            $order->update($updateData);
+            
+            DB::commit();
+            
+            // Recharger la commande pour avoir les dernières données
+            $order->refresh();
+            
+            Log::info('Statut mis à jour avec succès', [
+                'order_number' => $orderNumber,
+                'new_status' => $request->status,
+                'has_refund_proof' => !is_null($refundProofPath)
+            ]);
+            
+            return response()->json([
+                'success' => true,
+                'message' => $request->status === 'refunded' 
+                    ? 'Remboursement enregistré avec succès.' 
+                    : 'Statut mis à jour avec succès.',
+                'order' => [
+                    'status_label' => $order->status_label,
+                    'status_color' => $order->status_color,
+                ]
+            ]);
+            
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            DB::rollback();
+            return response()->json([
+                'success' => false,
+                'message' => 'Erreur de validation',
+                'errors' => $e->errors()
+            ], 422);
+            
+        } catch (\Exception $e) {
+            DB::rollback();
+            Log::error('Erreur updateStatus: ' . $e->getMessage(), [
+                'trace' => $e->getTraceAsString()
+            ]);
+            
+            return response()->json([
+                'success' => false,
+                'message' => 'Erreur lors de la mise à jour: ' . $e->getMessage()
+            ], 500);
         }
-        
-        // Préparer les données de mise à jour
-        $updateData = [
-            'status' => $request->status,
-            'notes' => $request->notes,
-        ];
-        
-        // Si c'est un remboursement, ajouter les informations
-        if ($request->status === 'refunded') {
-            $updateData['refund_proof'] = $refundProofPath;
-            $updateData['refunded_at'] = now();
-            $updateData['payment_status'] = 'refunded'; // Optionnel
-        }
-        
-        $order->update($updateData);
-        
-        DB::commit();
-        
-        // Recharger la commande pour avoir les dernières données
-        $order->refresh();
-        
-        Log::info('Statut mis à jour avec succès', [
-            'order_number' => $orderNumber,
-            'new_status' => $request->status,
-            'has_refund_proof' => !is_null($refundProofPath)
-        ]);
-        
-        return response()->json([
-            'success' => true,
-            'message' => $request->status === 'refunded' 
-                ? 'Remboursement enregistré avec succès.' 
-                : 'Statut mis à jour avec succès.',
-            'order' => [
-                'status_label' => $order->status_label,
-                'status_color' => $order->status_color,
-            ]
-        ]);
-        
-    } catch (\Illuminate\Validation\ValidationException $e) {
-        DB::rollback();
-        return response()->json([
-            'success' => false,
-            'message' => 'Erreur de validation',
-            'errors' => $e->errors()
-        ], 422);
-        
-    } catch (\Exception $e) {
-        DB::rollback();
-        Log::error('Erreur updateStatus: ' . $e->getMessage(), [
-            'trace' => $e->getTraceAsString()
-        ]);
-        
-        return response()->json([
-            'success' => false,
-            'message' => 'Erreur lors de la mise à jour: ' . $e->getMessage()
-        ], 500);
     }
-}
 
     // ================================================================
     // MARQUER COMME PAYÉE
     // ================================================================
     public function markPaid(Request $request, $orderNumber)
-{
-    try {
-        DB::beginTransaction();
-        
-        Log::info('Tentative de marquage de paiement', [
-            'order_number' => $orderNumber,
-            'user_id' => Auth::id(),
-            'user_name' => Auth::user() ? Auth::user()->name : 'Inconnu',
-            'ip' => $request->ip(),
-            'timestamp' => now()->toDateTimeString()
-        ]);
-        
-        $order = Order::where('order_number', $orderNumber)->firstOrFail();
-        
-        Log::info('Commande trouvée', [
-            'order_id' => $order->id,
-            'order_number' => $order->order_number,
-            'current_payment_status' => $order->payment_status,
-            'current_payment_reference' => $order->payment_reference,
-            'order_total' => $order->total,
-            'client' => $order->user->name ?? $order->shipping_fullname
-        ]);
-        
-        // Validation
-        $request->validate([
-            'payment_reference' => 'nullable|string|max:255',
-            'payment_proof' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120',
-        ], [
-            'payment_proof.image' => 'Le fichier doit être une image',
-            'payment_proof.mimes' => 'Le format doit être JPEG, PNG, JPG ou GIF',
-            'payment_proof.max' => 'La taille de l\'image ne doit pas dépasser 5MB'
-        ]);
-
-        Log::debug('Données de paiement reçues', [
-            'payment_reference' => $request->payment_reference,
-            'has_file' => $request->hasFile('payment_proof'),
-            'file_original_name' => $request->hasFile('payment_proof') ? $request->file('payment_proof')->getClientOriginalName() : null,
-            'file_size' => $request->hasFile('payment_proof') ? $request->file('payment_proof')->getSize() : null,
-            'file_mime' => $request->hasFile('payment_proof') ? $request->file('payment_proof')->getMimeType() : null
-        ]);
-        
-        // Gestion de l'upload
-        $proofPath = null;
-        if ($request->hasFile('payment_proof')) {
-            try {
-                $image = $request->file('payment_proof');
-                
-                // Vérifier que le fichier est valide
-                if (!$image->isValid()) {
-                    throw new \Exception('Le fichier uploadé n\'est pas valide');
-                }
-                
-                // Créer le dossier s'il n'existe pas
-                $uploadPath = storage_path('app/public/payment_proofs');
-                if (!file_exists($uploadPath)) {
-                    mkdir($uploadPath, 0755, true);
-                }
-                
-                $fileName = 'payment_' . $orderNumber . '_' . time() . '.' . $image->getClientOriginalExtension();
-                
-                // Méthode 1: Utiliser storeAs (retourne le chemin relatif)
-                $proofPath = $image->storeAs('payment_proofs', $fileName, 'public');
-                
-                // Vérifier que le fichier a bien été créé
-                $fullPath = storage_path('app/public/' . $proofPath);
-                if (file_exists($fullPath)) {
-                    Log::info('Fichier vérifié physiquement', [
-                        'full_path' => $fullPath,
-                        'file_exists' => true,
-                        'file_size' => filesize($fullPath)
-                    ]);
-                } else {
-                    Log::warning('Fichier non trouvé après upload', [
-                        'full_path' => $fullPath
-                    ]);
-                }
-                
-                Log::info('Fichier de preuve de paiement uploadé avec succès', [
-                    'original_name' => $image->getClientOriginalName(),
-                    'stored_name' => $fileName,
-                    'path' => $proofPath,
-                    'full_storage_path' => storage_path('app/public/' . $proofPath),
-                    'public_url' => asset('storage/' . $proofPath),
-                    'size' => $image->getSize(),
-                    'mime' => $image->getMimeType()
-                ]);
-                
-            } catch (\Exception $e) {
-                Log::error('Erreur lors de l\'upload de la preuve de paiement', [
-                    'order_number' => $orderNumber,
-                    'error' => $e->getMessage(),
-                    'trace' => $e->getTraceAsString()
-                ]);
-                throw new \Exception('Impossible d\'uploader la preuve de paiement: ' . $e->getMessage());
-            }
-        }
-        
-        // Mise à jour de la commande
-        $oldStatus = $order->payment_status;
-        $oldReference = $order->payment_reference;
-        
-        Log::info('Avant mise à jour BDD', [
-            'payment_proof_value' => $proofPath
-        ]);
-        
-        $updateData = [
-            'payment_status' => 'paid',
-            'payment_reference' => $request->payment_reference,
-        ];
-        
-        // N'ajouter payment_proof que s'il n'est pas null
-        if ($proofPath !== null) {
-            $updateData['payment_proof'] = $proofPath;
-        }
-        
-        $order->update($updateData);
-        
-        // Rafraîchir le modèle pour voir les données mises à jour
-        $order->refresh();
-        
-        Log::info('Paiement marqué avec succès', [
-            'order_number' => $orderNumber,
-            'order_id' => $order->id,
-            'old_status' => $oldStatus,
-            'new_status' => 'paid',
-            'old_reference' => $oldReference,
-            'new_reference' => $request->payment_reference,
-            'proof_path_in_db' => $order->payment_proof, // Vérifier ce qui est en BDD
-            'proof_path_saved' => $proofPath,
-            'updated_by' => Auth::id()
-        ]);
-        
-        DB::commit();
-        
-        // Vérification finale
-        $finalCheck = Order::where('order_number', $orderNumber)->first();
-        Log::info('Vérification après commit', [
-            'order_number' => $orderNumber,
-            'payment_proof_in_db' => $finalCheck->payment_proof
-        ]);
-        
-        return response()->json([
-            'success' => true,
-            'message' => 'Commande marquée comme payée avec succès.',
-            'alert-type' => 'Succès',
-            'data' => [
+    {
+        try {
+            DB::beginTransaction();
+            
+            Log::info('Tentative de marquage de paiement', [
+                'order_number' => $orderNumber,
+                'user_id' => Auth::id(),
+                'user_name' => Auth::user() ? Auth::user()->name : 'Inconnu',
+                'ip' => $request->ip(),
+                'timestamp' => now()->toDateTimeString()
+            ]);
+            
+            $order = Order::where('order_number', $orderNumber)->firstOrFail();
+            
+            Log::info('Commande trouvée', [
+                'order_id' => $order->id,
                 'order_number' => $order->order_number,
-                'payment_reference' => $order->payment_reference,
-                'has_proof' => !is_null($order->payment_proof),
-                'proof_url' => $order->payment_proof ? asset('storage/' . $order->payment_proof) : null
-            ]
-        ]);
-        
-    } catch (\Exception $e) {
-        DB::rollback();
-        Log::error('Erreur lors du marquage de paiement', [
-            'order_number' => $orderNumber,
-            'error_message' => $e->getMessage(),
-            'error_line' => $e->getLine(),
-            'error_file' => $e->getFile(),
-            'trace' => $e->getTraceAsString(),
-            'user_id' => Auth::id(),
-            'request_data' => $request->except('payment_proof')
-        ]);
-        
-        return response()->json([
-            'success' => false,
-            'message' => 'Erreur lors du marquage du paiement: ' . $e->getMessage()
-        ], 500);
+                'current_payment_status' => $order->payment_status,
+                'current_payment_reference' => $order->payment_reference,
+                'order_total' => $order->total,
+                'client' => $order->user->name ?? $order->shipping_fullname
+            ]);
+            
+            // Validation
+            $request->validate([
+                'payment_reference' => 'nullable|string|max:255',
+                'payment_proof' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120',
+            ], [
+                'payment_proof.image' => 'Le fichier doit être une image',
+                'payment_proof.mimes' => 'Le format doit être JPEG, PNG, JPG ou GIF',
+                'payment_proof.max' => 'La taille de l\'image ne doit pas dépasser 5MB'
+            ]);
+
+            Log::debug('Données de paiement reçues', [
+                'payment_reference' => $request->payment_reference,
+                'has_file' => $request->hasFile('payment_proof'),
+                'file_original_name' => $request->hasFile('payment_proof') ? $request->file('payment_proof')->getClientOriginalName() : null,
+                'file_size' => $request->hasFile('payment_proof') ? $request->file('payment_proof')->getSize() : null,
+                'file_mime' => $request->hasFile('payment_proof') ? $request->file('payment_proof')->getMimeType() : null
+            ]);
+            
+            // Gestion de l'upload
+            $proofPath = null;
+            if ($request->hasFile('payment_proof')) {
+                try {
+                    $image = $request->file('payment_proof');
+                    
+                    // Vérifier que le fichier est valide
+                    if (!$image->isValid()) {
+                        throw new \Exception('Le fichier uploadé n\'est pas valide');
+                    }
+                    
+                    // Créer le dossier s'il n'existe pas
+                    $uploadPath = storage_path('app/public/payment_proofs');
+                    if (!file_exists($uploadPath)) {
+                        mkdir($uploadPath, 0755, true);
+                    }
+                    
+                    $fileName = 'payment_' . $orderNumber . '_' . time() . '.' . $image->getClientOriginalExtension();
+                    
+                    // Méthode 1: Utiliser storeAs (retourne le chemin relatif)
+                    $proofPath = $image->storeAs('payment_proofs', $fileName, 'public');
+                    
+                    // Vérifier que le fichier a bien été créé
+                    $fullPath = storage_path('app/public/' . $proofPath);
+                    if (file_exists($fullPath)) {
+                        Log::info('Fichier vérifié physiquement', [
+                            'full_path' => $fullPath,
+                            'file_exists' => true,
+                            'file_size' => filesize($fullPath)
+                        ]);
+                    } else {
+                        Log::warning('Fichier non trouvé après upload', [
+                            'full_path' => $fullPath
+                        ]);
+                    }
+                    
+                    Log::info('Fichier de preuve de paiement uploadé avec succès', [
+                        'original_name' => $image->getClientOriginalName(),
+                        'stored_name' => $fileName,
+                        'path' => $proofPath,
+                        'full_storage_path' => storage_path('app/public/' . $proofPath),
+                        'public_url' => asset('storage/' . $proofPath),
+                        'size' => $image->getSize(),
+                        'mime' => $image->getMimeType()
+                    ]);
+                    
+                } catch (\Exception $e) {
+                    Log::error('Erreur lors de l\'upload de la preuve de paiement', [
+                        'order_number' => $orderNumber,
+                        'error' => $e->getMessage(),
+                        'trace' => $e->getTraceAsString()
+                    ]);
+                    throw new \Exception('Impossible d\'uploader la preuve de paiement: ' . $e->getMessage());
+                }
+            }
+            
+            // Mise à jour de la commande
+            $oldStatus = $order->payment_status;
+            $oldReference = $order->payment_reference;
+            
+            Log::info('Avant mise à jour BDD', [
+                'payment_proof_value' => $proofPath
+            ]);
+            
+            $updateData = [
+                'payment_status' => 'paid',
+                'payment_reference' => $request->payment_reference,
+            ];
+            
+            // N'ajouter payment_proof que s'il n'est pas null
+            if ($proofPath !== null) {
+                $updateData['payment_proof'] = $proofPath;
+            }
+            
+            $order->update($updateData);
+            
+            // Rafraîchir le modèle pour voir les données mises à jour
+            $order->refresh();
+            
+            Log::info('Paiement marqué avec succès', [
+                'order_number' => $orderNumber,
+                'order_id' => $order->id,
+                'old_status' => $oldStatus,
+                'new_status' => 'paid',
+                'old_reference' => $oldReference,
+                'new_reference' => $request->payment_reference,
+                'proof_path_in_db' => $order->payment_proof, // Vérifier ce qui est en BDD
+                'proof_path_saved' => $proofPath,
+                'updated_by' => Auth::id()
+            ]);
+            
+            DB::commit();
+            
+            // Vérification finale
+            $finalCheck = Order::where('order_number', $orderNumber)->first();
+            Log::info('Vérification après commit', [
+                'order_number' => $orderNumber,
+                'payment_proof_in_db' => $finalCheck->payment_proof
+            ]);
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Commande marquée comme payée avec succès.',
+                'alert-type' => 'Succès',
+                'data' => [
+                    'order_number' => $order->order_number,
+                    'payment_reference' => $order->payment_reference,
+                    'has_proof' => !is_null($order->payment_proof),
+                    'proof_url' => $order->payment_proof ? asset('storage/' . $order->payment_proof) : null
+                ]
+            ]);
+            
+        } catch (\Exception $e) {
+            DB::rollback();
+            Log::error('Erreur lors du marquage de paiement', [
+                'order_number' => $orderNumber,
+                'error_message' => $e->getMessage(),
+                'error_line' => $e->getLine(),
+                'error_file' => $e->getFile(),
+                'trace' => $e->getTraceAsString(),
+                'user_id' => Auth::id(),
+                'request_data' => $request->except('payment_proof')
+            ]);
+            
+            return response()->json([
+                'success' => false,
+                'message' => 'Erreur lors du marquage du paiement: ' . $e->getMessage()
+            ], 500);
+        }
     }
-}
 
     // ================================================================
     // COMMENCER LE TRAITEMENT (pending → confirmed)

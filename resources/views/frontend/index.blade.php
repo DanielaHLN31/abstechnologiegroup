@@ -594,10 +594,10 @@
 	<script src="{{ asset('frontend/js/main.js') }}"></script>
 
 	<!-- Autres librairies -->
-	<script src="{{ asset('frontend/lib/easing/easing.min.js') }}"></script>
-	<script src="{{ asset('frontend/lib/waypoints/waypoints.min.js') }}"></script>
-	<script src="{{ asset('frontend/lib/lightbox/js/lightbox.min.js') }}"></script>
-	<script src="{{ asset('frontend/lib/owlcarousel/owl.carousel.min.js') }}"></script>
+	<script src="{{ asset('frontend/lib/easing/easing.min.js') }}" defer></script>
+	<script src="{{ asset('frontend/lib/waypoints/waypoints.min.js') }}" defer></script>
+	<script src="{{ asset('frontend/lib/lightbox/js/lightbox.min.js') }}" defer></script>
+	<script src="{{ asset('frontend/lib/owlcarousel/owl.carousel.min.js') }}" defer></script>
 
 	<!-- ENFIN votre script global (contient le code du modal) -->
 	@include('frontend.global_js')
