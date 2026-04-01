@@ -20,9 +20,6 @@ class RoleController extends Controller
     //
     public function AllRoles(){
 
-        //
-
-        // Variable pour déterminé l'entité Tribunal de l'utilisateur
         $users = Auth::user();
 
 

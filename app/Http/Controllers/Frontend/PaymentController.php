@@ -16,15 +16,6 @@ class PaymentController extends Controller
         \FedaPay\FedaPay::setEnvironment(config('services.fedapay.env', 'sandbox'));
     }
 
-    // ================================================================
-    // CALLBACK — FedaPay redirige ici en GET après paiement
-    //
-    // URL reçue : /payment/callback?id=419127&status=approved
-    //
-    // IMPORTANT : la route doit être déclarée en GET dans routes/web.php :
-    //   Route::get('/payment/callback', [PaymentController::class, 'callback'])
-    //       ->name('payment.callback');
-    // ================================================================
     public function callback(Request $request)
     {
         Log::info('FedaPay callback reçu', $request->all());

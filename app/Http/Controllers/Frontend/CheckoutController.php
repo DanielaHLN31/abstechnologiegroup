@@ -15,7 +15,7 @@ use App\Models\Product;
 class CheckoutController extends Controller
 {
     // ================================================================
-    // STEP 1 — Page checkout
+    // — Page checkout
     // ================================================================
     public function index()
     {
@@ -55,7 +55,7 @@ class CheckoutController extends Controller
     }
 
     // ================================================================
-    // Initialiser FedaPay via config() (compatible config:cache)
+    // Initialiser FedaPay via config() 
     // ================================================================
     private function bootFedaPay(): void
     {
@@ -65,10 +65,6 @@ class CheckoutController extends Controller
 
     // ================================================================
     // Formater le numéro de téléphone pour FedaPay (Bénin)
-    //
-    // Règle : FedaPay attend +22901XXXXXXXX (nouveau format Bénin)
-    // On garde UNIQUEMENT les chiffres après avoir retiré tout indicatif,
-    // puis on préfixe avec +229.
     // ================================================================
     private function formatPhone(string $raw): string
     {

@@ -1,63 +1,57 @@
 {{--
     ════════════════════════════════════════════════════════
     GLOBAL JS — ABS TECHNOLOGIE
-    Correction : bouton "Ajouter" sur les cards produits
-    - Si le produit a des couleurs → ouvre le modal quick view
-    - Sinon → ajoute directement au panier via AJAX
     ════════════════════════════════════════════════════════
 --}}
-
-<!-- Toastr -->
 {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script> --}}
 <script>
-    // ── ABS Notif (remplace Toastr) ──
-(function() {
-  const ICONS = {
-    success: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>`,
-    error:   `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`,
-    warning: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>`,
-    info:    `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`
-  };
+    (function() {
+    const ICONS = {
+        success: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>`,
+        error:   `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`,
+        warning: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>`,
+        info:    `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`
+    };
 
-  function getContainer() {
-    let c = document.getElementById('abs-notif-container');
-    if (!c) { c = document.createElement('div'); c.id = 'abs-notif-container'; document.body.appendChild(c); }
-    return c;
-  }
+    function getContainer() {
+        let c = document.getElementById('abs-notif-container');
+        if (!c) { c = document.createElement('div'); c.id = 'abs-notif-container'; document.body.appendChild(c); }
+        return c;
+    }
 
-  function show(type, message, title, duration) {
-    duration = duration || 3800;
-    const el = document.createElement('div');
-    el.className = `abs-notif t-${type}`;
-    el.innerHTML = `
-      <div class="abs-notif-icon">${ICONS[type]}</div>
-      <div class="abs-notif-body">
-        ${title ? `<p class="abs-notif-title">${title}</p>` : ''}
-        ${message ? `<p class="abs-notif-msg">${message}</p>` : ''}
-      </div>
-      <button class="abs-notif-close" aria-label="Fermer">✕</button>
-      <div class="abs-notif-bar" style="animation-duration:${duration}ms"></div>`;
-    el.querySelector('.abs-notif-close').addEventListener('click', () => dismiss(el));
-    getContainer().appendChild(el);
-    el._timer = setTimeout(() => dismiss(el), duration);
-  }
+    function show(type, message, title, duration) {
+        duration = duration || 3800;
+        const el = document.createElement('div');
+        el.className = `abs-notif t-${type}`;
+        el.innerHTML = `
+        <div class="abs-notif-icon">${ICONS[type]}</div>
+        <div class="abs-notif-body">
+            ${title ? `<p class="abs-notif-title">${title}</p>` : ''}
+            ${message ? `<p class="abs-notif-msg">${message}</p>` : ''}
+        </div>
+        <button class="abs-notif-close" aria-label="Fermer">✕</button>
+        <div class="abs-notif-bar" style="animation-duration:${duration}ms"></div>`;
+        el.querySelector('.abs-notif-close').addEventListener('click', () => dismiss(el));
+        getContainer().appendChild(el);
+        el._timer = setTimeout(() => dismiss(el), duration);
+    }
 
-  function dismiss(el) {
-    clearTimeout(el._timer);
-    el.classList.add('abs-hide');
-    setTimeout(() => el.remove(), 240);
-  }
+    function dismiss(el) {
+        clearTimeout(el._timer);
+        el.classList.add('abs-hide');
+        setTimeout(() => el.remove(), 240);
+    }
 
-  window.toastr = {
-    success: (msg, title, opts) => show('success', msg, title, opts?.timeOut),
-    error:   (msg, title, opts) => show('error',   msg, title, opts?.timeOut),
-    warning: (msg, title, opts) => show('warning', msg, title, opts?.timeOut),
-    info:    (msg, title, opts) => show('info',    msg, title, opts?.timeOut),
-  };
-})();
-    </script>
+    window.toastr = {
+        success: (msg, title, opts) => show('success', msg, title, opts?.timeOut),
+        error:   (msg, title, opts) => show('error',   msg, title, opts?.timeOut),
+        warning: (msg, title, opts) => show('warning', msg, title, opts?.timeOut),
+        info:    (msg, title, opts) => show('info',    msg, title, opts?.timeOut),
+    };
+    })();
+</script>
 
-    <script>
+<script>
     /* ================================================================
     VARIABLES GLOBALES
     ================================================================ */
@@ -102,71 +96,42 @@
     /* ================================================================
     BOUTON "AJOUTER" SUR LES CARDS PRODUITS
     ================================================================ */
-    /* ================================================================
-   BOUTON "AJOUTER" SUR LES CARDS PRODUITS
-   - Vérifie si le produit a des couleurs
-   - Si oui → ouvre le modal quick view pour choisir la couleur
-   - Si non → ajoute directement au panier
-   ================================================================ */
     $(document).ready(function () {
         $(document).on('click', '.abs-add-to-cart', function (e) {
             e.preventDefault();
             e.stopPropagation();
 
-            if (!IS_AUTH) {
-                toastr.warning('Veuillez vous connecter pour ajouter des articles au panier.', 'Connexion requise');
-                setTimeout(() => {
-                    window.location.href = LOGIN_URL + '?redirect=' + encodeURIComponent(window.location.pathname);
-                }, 1500);
-                return;
-            }
+            // ✅ SUPPRIMÉ : le bloc "if (!IS_AUTH) { redirect... }" 
+            // On laisse tous les utilisateurs ajouter au panier
 
             const $btn = $(this);
             const productId = $btn.data('product-id');
-            const productName = $btn.data('product-name');
-            
             if (!productId) return;
 
-            // Feedback visuel de chargement
             const originalHtml = $btn.html();
             $btn.html('<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="animation: spin 0.6s linear infinite"><path d="M21 12a9 9 0 11-6.2-8.56"/></svg>').prop('disabled', true);
 
-            // Vérifier si le produit a des couleurs
             $.ajax({
                 url: '/client/products/' + productId,
                 method: 'GET',
                 success: function(response) {
                     const p = response.product || response;
-                    
-                    if (!p) {
-                        // Fallback : ajout direct
-                        addToCartDirect(productId, $btn, originalHtml);
-                        return;
-                    }
+                    if (!p) { addToCartDirect(productId, $btn, originalHtml); return; }
 
                     const hasColors = p.colors && p.colors.length > 0;
-                    const hasMultipleColors = hasColors && p.colors.filter(c => (c.pivot ? c.pivot.stock_quantity : 0) > 0).length > 1;
+                    const available = hasColors ? p.colors.filter(c => (c.pivot ? c.pivot.stock_quantity : 0) > 0) : [];
 
-                    if (hasColors && hasMultipleColors) {
-                        // Le produit a plusieurs couleurs → ouvrir le modal
+                    if (hasColors && available.length > 1) {
                         $btn.html(originalHtml).prop('disabled', false);
                         openQuickViewModal(productId, p);
-                        toastr.info(
-                            'Ce produit est disponible en plusieurs couleurs. Veuillez en choisir une.',
-                            'Choisissez une couleur',
-                            { timeOut: 3000 }
-                        );
-                    } else if (hasColors && p.colors.filter(c => (c.pivot ? c.pivot.stock_quantity : 0) > 0).length === 1) {
-                        // Une seule couleur disponible → ajouter directement avec cette couleur
-                        const availableColor = p.colors.find(c => (c.pivot ? c.pivot.stock_quantity : 0) > 0);
-                        addToCartWithColor(productId, availableColor.id, $btn, originalHtml);
+                        toastr.info('Ce produit est disponible en plusieurs couleurs. Veuillez en choisir une.', 'Choisissez une couleur', { timeOut: 3000 });
+                    } else if (hasColors && available.length === 1) {
+                        addToCartWithColor(productId, available[0].id, $btn, originalHtml);
                     } else {
-                        // Pas de couleur → ajout direct
                         addToCartDirect(productId, $btn, originalHtml);
                     }
                 },
                 error: function() {
-                    // En cas d'erreur, essayer l'ajout direct
                     addToCartDirect(productId, $btn, originalHtml);
                 }
             });
@@ -518,11 +483,11 @@
         
         // Ajout au panier depuis modal
         $(document).on('click', '#modal1-add-cart', function() {
-            if (!IS_AUTH) {
-                toastr.warning('Veuillez vous connecter.', 'Connexion requise');
-                setTimeout(() => window.location.href = LOGIN_URL, 1500);
-                return;
-            }
+            // if (!IS_AUTH) {
+            //     toastr.warning('Veuillez vous connecter.', 'Connexion requise');
+            //     setTimeout(() => window.location.href = LOGIN_URL, 1500);
+            //     return;
+            // }
             
             const productId = $(this).data('product-id');
             const qty = parseInt($('#modal1-qty').val()) || 1;
@@ -718,6 +683,7 @@
             });
         });
     });
+    
     /* ================================================================
     RECHERCHE AUTOCOMPLETE
     ================================================================ */
