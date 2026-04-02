@@ -3,133 +3,257 @@
 <head>
 	<title>Boutique ABS-TECHNOLOGIE</title>
 	@include('client.body.head')
-	<!--===============================================================================================-->
+
+  <style>
+	
+/* @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap'); */
+	.hs-dropdown.open {
+		display: none !important;
+	}
+  </style>
 </head>
 <body class="animsition">
 	
 	<!-- Header -->
 	@include('client.body.header')
 
+	@include('frontend.modal')
 
-		@include('frontend.modal')
-
-	{{-- <div class="mb-5"></div> --}}
 	
-	<!-- Title page -->
-	<section class="bg-img1 txt-center p-lr-15 p-tb-92 m-t-150" style="background-image: url('{{ asset('frontend/images/bg-01.png') }}');">
-		<h2 class="ltext-105 cl0 txt-center">
-			Nos produits
-		</h2>
-	</section>	
+<section class="shop-hero">
+
+    {{-- ── Gauche : titre + search + stats ── --}}
+    <div class="shop-hero__left">
+
+        <div class="shop-hero__pill">
+            <span class="shop-hero__pill-dot"></span>
+            Boutique officielle
+        </div>
+
+        <h1 class="shop-hero__title">
+            Tous nos <span>produits</span> au <br>meilleur prix
+        </h1>
+
+        <p class="shop-hero__sub">
+            Smartphones, informatique, électroménager —<br>
+            livrés rapidement au cœur de Cotonou.
+        </p>
+
+        {{-- Barre de recherche (pointe vers la même route) --}}
+        
+		@include('frontend.hero-search')
+
+
+    </div>
+
+    {{-- ── Droite : raccourcis catégories (3 premières) ── --}}
+    <div class="shop-hero__right">
+
+        @php
+            $heroIcons = [
+                // SVG path pour chaque catégorie (téléphonie, informatique, électroménager)
+                '<rect x="5" y="2" width="14" height="20" rx="2"/><line x1="9" y1="7" x2="15" y2="7"/><line x1="9" y1="11" x2="15" y2="11"/><circle cx="12" cy="16" r="1.2" fill="#0066CC" stroke="none"/>',
+                '<rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>',
+                '<path d="M3 6h18l-1.5 9H4.5L3 6z"/><path d="M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2"/><circle cx="9" cy="19" r="1.2" fill="#0066CC" stroke="none"/><circle cx="15" cy="19" r="1.2" fill="#0066CC" stroke="none"/>',
+            ];
+            $heroDescs = [
+                'Smartphones & accessoires',
+                'PC, portables & périphériques',
+                'Appareils & climatisation',
+            ];
+        @endphp
+
+        @foreach($categories->take(3) as $index => $cat)
+        <a href="{{ route('client.product', ['category' => $cat->id]) }}" class="shop-hero__cat">
+            <div class="shop-hero__cat-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#0066CC" stroke-width="1.8">
+                    {!! $heroIcons[$index] ?? '<circle cx="12" cy="12" r="8"/>' !!}
+                </svg>
+            </div>
+            <div>
+                <span class="shop-hero__cat-name">{{ $cat->name }}</span>
+                <span class="shop-hero__cat-desc">{{ $heroDescs[$index] ?? ($cat->description ?? 'Voir les produits') }}</span>
+            </div>
+        </a>
+        @endforeach
+
+    </div>
+
+</section>
 
 	<!-- Product -->
-	<div class="bg0 m-t-23 p-b-140 mt-5">
-		<div class="container">
-			<div class="flex-w flex-sb-m p-b-52">
-				<div class="flex-w flex-l-m filter-tope-group m-tb-10">
-					<button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5 {{ is_null($activeCategory) ? 'how-active1' : '' }}" 
-						data-filter="*">
-						All Products
-					</button>
-					
-					@foreach($categories->take(3) as $category)
-					<button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5 {{ $activeCategory == $category->id ? 'how-active1' : '' }}" 
-						data-filter=".cat-{{ $category->id }}">
-						{{ $category->name }}
-					</button>
-					@endforeach
-				</div>
-			@include('frontend.filter')
+	<section class="ps-section">
 
-			<div class="row isotope-grid">
-				@forelse($products as $product)
-				<div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item cat-{{ $product->category_id }}"
-					data-brand-id="{{ $product->brand_id }}"
-					data-colors="{{ json_encode($product->colors) }}">
-
-					<!-- Block2 -->
-					<div class="block2">
-						<div class="block2-pic hov-img0">
-							@if($product->images->isNotEmpty())
-								<img src="{{ asset('storage/' . $product->images->first()->image_path) }}" alt="{{ $product->name }}">
-							@else
-								<img src="{{ asset('frontend/images/no-image.jpg') }}" alt="No Image">
-							@endif
-
-							<a href="#" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1" 
-								data-product-id="{{ $product->id ?? '' }}"
-								data-product-name="{{ $product->name ?? '' }}"
-								data-product-price="{{ $product->price ?? '' }}"
-								data-product-description="{{ $product->description ?? '' }}"
-								data-product-images="{{ json_encode($product->images) }}"
-								data-product-colors="{{ json_encode($product->colors) }}"
-								data-product-specs="{{ json_encode($product->specifications) }}">
-									Voir
-							</a>
-						</div>
-
-						<div class="block2-txt flex-w flex-t p-t-14">
-							<div class="block2-txt-child1 flex-col-l">
-								<a href="javascript:;" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
-									{{ $product->name }}
-								</a>
-
-								<span class="stext-105 cl3">
-									@if($product->compare_price && $product->compare_price > $product->price)
-										<span class="text-decoration-line-through text-muted">{{ number_format($product->compare_price, 0, ',', ' ') }} FCFA</span>
-										<span class="text-danger ml-2">{{ number_format($product->price, 0, ',', ' ') }} FCFA</span>
-									@else
-										{{ number_format($product->price, 0, ',', ' ') }} FCFA
-									@endif
-								</span>
-								
-								@if($product->colors->isNotEmpty())
-								<div class="mt-2">
-									@foreach($product->colors->take(3) as $color)
-									<span class="d-inline-block rounded-circle mr-1" 
-										style="width: 15px; height: 15px; background-color: {{ $color->code }}; border: 1px solid #ddd;" 
-										title="{{ $color->name }}"></span>
-									@endforeach
-									@if($product->colors->count() > 3)
-									<span class="small text-muted">+{{ $product->colors->count() - 3 }}</span>
-									@endif
-								</div>
-								@endif
-							</div>
-
-							<div class="block2-txt-child2 flex-r p-t-3">
-								<a href="#" class="btn-addwish-b2 dis-block pos-relative js-addwish-b2" data-product-id="{{ $product->id }}">
-									<img class="icon-heart1 dis-block trans-04" src="{{ asset('frontend/images/icons/icon-heart-01.png') }}" alt="ICON">
-									<img class="icon-heart2 dis-block trans-04 ab-t-l" src="{{ asset('frontend/images/icons/icon-heart-02.png') }}" alt="ICON">
-								</a>
-							</div>
-						</div>
-					</div>
-				</div>
-				@empty
-				<div class="col-12 text-center p-t-50 p-b-50">
-					<p class="stext-113 cl6">Aucun produit disponible pour le moment.</p>
-				</div>
-				@endforelse
+		{{-- Header --}}
+		<div class="ps-header">
+			<div class="ps-section-accent"></div>
+			<div class="ps-label">
+				<span class="ps-label-dot"></span>
+				Notre catalogue
 			</div>
-			<!-- Load more -->
-			{{-- APRÈS --}}
-			@if($products->hasMorePages())
-			<div class="flex-c-m flex-w w-full p-t-45" id="load-more-wrap">
-				<a href="#" class="flex-c-m stext-101 cl5 size-103 bg2 bor1 hov-btn1 p-lr-15 trans-04" id="load-more"
-				data-next-page="2"
-				data-category="{{ request('category') }}">
-					Voir plus
-				</a>
-			</div>
-			@endif
+			<h2 class="ps-title">Nos <span>Produits</span></h2>
+			<p class="ps-subtitle">Découvrez notre sélection complète de produits tech, high-end &amp; multimédia</p>
 		</div>
-	</div>
-		
+
+		{{-- Filtres dynamiques (catégories depuis la BDD) --}}
+		<div class="ps-filters">
+			<button class="ps-filter-btn {{ is_null($activeCategory) ? 'active' : '' }}" data-filter="all">
+				Tous les produits
+			</button>
+
+			@foreach($categories->take(6) as $cat)
+			<button class="ps-filter-btn {{ $activeCategory == $cat->id ? 'active' : '' }}" data-filter="cat-{{ $cat->id }}">
+				{{ $cat->name }}
+			</button>
+			@endforeach
+		</div>
+
+		{{-- Filtre avancé --}}
+		@include('frontend.filter')
+
+		{{-- Grille produits --}}
+		<div class="ps-grid" id="psGrid">
+
+			@forelse($products as $product)
+			<div class="ps-card" data-cat="cat-{{ $product->category_id }}">
+
+				{{-- Zone image --}}
+				<div class="ps-card-img">
+
+					@if($product->images->isNotEmpty())
+						<img
+							src="{{ asset('storage/' . $product->images->first()->image_path) }}"
+							alt="{{ $product->name }}"
+							loading="lazy">
+					@else
+						<img
+							src="{{ asset('frontend/images/no-image.jpg') }}"
+							alt="{{ $product->name }}"
+							loading="lazy">
+					@endif
+
+					{{-- Badge (Promo > Nouveau > Top Vente) --}}
+					@if($product->compare_price && $product->compare_price > $product->price)
+						@php $discount = round((1 - $product->price / $product->compare_price) * 100); @endphp
+						<span class="ps-badge badge-promo">-{{ $discount }}%</span>
+					@elseif($product->created_at->diffInDays(now()) <= 30)
+						<span class="ps-badge badge-new">Nouveau</span>
+					@elseif($product->is_featured ?? false)
+						<span class="ps-badge badge-top">Top Vente</span>
+					@endif
+
+					{{-- Bouton Favori --}}
+					<button class="ps-wish js-addwish-b2"
+							data-product-id="{{ $product->id }}"
+							title="Ajouter aux favoris">
+						<svg viewBox="0 0 24 24" width="16" height="16" fill="none"
+							stroke="#CC1B1B" stroke-width="2">
+							<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67
+									l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06
+									L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+						</svg>
+					</button>
+
+					{{-- Aperçu rapide --}}
+					<div class="ps-quickview js-show-modal1"
+						data-product-id="{{ $product->id }}"
+						data-product-name="{{ $product->name }}"
+						data-product-price="{{ $product->price }}"
+						data-product-description="{{ $product->description }}"
+						data-product-images="{{ json_encode($product->images) }}"
+						data-product-colors="{{ json_encode($product->colors) }}"
+						data-product-specs="{{ json_encode($product->specifications) }}">
+						Aperçu rapide
+					</div>
+
+				</div>{{-- /.ps-card-img --}}
+
+				{{-- Corps --}}
+				<div class="ps-card-body">
+
+					<span class="ps-card-cat">
+						{{ $product->category->name ?? 'Produit' }}
+					</span>
+
+					<div class="ps-card-name">{{ $product->name }}</div>
+
+					{{-- Pastilles couleurs --}}
+					@if($product->colors->isNotEmpty())
+					<div class="ps-card-colors">
+						@foreach($product->colors->take(4) as $color)
+						<span class="ps-color-dot"
+							style="background-color:{{ $color->code }}"
+							title="{{ $color->name }}"></span>
+						@endforeach
+						@if($product->colors->count() > 4)
+						<span style="font-size:11px;color:var(--text-muted)">
+							+{{ $product->colors->count() - 4 }}
+						</span>
+						@endif
+					</div>
+					@endif
+
+					{{-- Footer prix + panier --}}
+					<div class="ps-card-footer">
+
+						<div class="ps-price">
+							@if($product->compare_price && $product->compare_price > $product->price)
+								<span class="ps-price-old">
+									{{ number_format($product->compare_price, 0, ',', ' ') }} F
+								</span>
+							@endif
+							<span class="ps-price-main">
+								{{ number_format($product->price, 0, ',', ' ') }} F
+							</span>
+						</div>
+
+						<button class="ps-add-btn abs-add-to-cart"
+								data-product-id="{{ $product->id }}"
+								data-product-name="{{ $product->name }}"
+								data-product-price="{{ $product->price }}">
+							<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+								width="13" height="13" stroke-width="2.5">
+								<path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+								<line x1="3" y1="6" x2="21" y2="6"/>
+								<path d="M16 10a4 4 0 01-8 0"/>
+							</svg>
+							Ajouter
+						</button>
+
+					</div>{{-- /.ps-card-footer --}}
+
+				</div>{{-- /.ps-card-body --}}
+
+			</div>{{-- /.ps-card --}}
+			@empty
+			<div style="grid-column:1/-1;text-align:center;padding:60px 0;color:var(--text-muted);">
+				Aucun produit disponible pour le moment.
+			</div>
+			@endforelse
+
+		</div>{{-- /.ps-grid --}}
+
+		{{-- Load more --}}
+		@if($products->hasMorePages())
+		<div class="ps-view-all">
+			<a href="#" class="ps-view-all-btn" id="load-more"
+				data-next-page="{{ $products->currentPage() + 1 }}"
+				data-category="{{ request('category') }}">
+				Voir plus de produits
+				<svg class="arrow" viewBox="0 0 24 24" width="16" height="16"
+					fill="none" stroke="currentColor" stroke-width="2.5">
+					<path d="M5 12h14M12 5l7 7-7 7"/>
+				</svg>
+			</a>
+		</div>
+		@endif
+
+	</section>
 
 	@include('client.body.footer')
+	@include('frontend.productModal')
 
-@include('frontend.productModal')
+<!--===============================================================================================-->	
 
 <!--===============================================================================================-->	
 	<script src="{{ asset('frontend/vendor/jquery/jquery-3.2.1.min.js') }}"></script>
@@ -197,52 +321,8 @@
 	</script>
 <!--===============================================================================================-->
 	<script src="{{ asset('frontend/js/main.js') }}"></script>
-	<script src="{{ asset('frontend/js/product.js') }}"></script>
 
 	@include('frontend.global_js')
-	<script>
-$(document).on('click', '#load-more', function (e) {
-    e.preventDefault();
 
-    const $btn      = $(this);
-    const nextPage  = $btn.data('next-page');
-    const category  = $btn.data('category') || '';
-
-    // Feedback visuel
-    $btn.text('Chargement...').css('pointer-events', 'none');
-
-    $.ajax({
-        url: '{{ route("client.product") }}',   // adapte si ta route diffère
-        method: 'GET',
-        dataType: 'json',
-        headers: { 'X-Requested-With': 'XMLHttpRequest', 'Accept': 'application/json' },
-        data: {
-            page    : nextPage,
-            category: category || undefined
-        },
-        success: function (res) {
-            // Injecter les nouveaux produits dans la grille Isotope
-            var $newItems = $(res.html);
-            $('.isotope-grid').append($newItems).isotope('appended', $newItems);
-
-            // Relancer Isotope pour bien placer les nouveaux éléments
-            $('.isotope-grid').isotope('layout');
-
-            if (res.has_more) {
-                $btn.data('next-page', res.next_page)
-                    .text('Voir plus')
-                    .css('pointer-events', '');
-            } else {
-                // Plus de produits : cacher le bouton
-                $('#load-more-wrap').fadeOut(300, function () { $(this).remove(); });
-            }
-        },
-        error: function () {
-            $btn.text('Voir plus').css('pointer-events', '');
-            toastr.error('Impossible de charger plus de produits.', 'Erreur');
-        }
-    });
-});
-</script>
 </body>
 </html>

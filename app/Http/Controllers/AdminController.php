@@ -429,17 +429,6 @@ class AdminController extends Controller
 
     }
 
-    // public function logout(Request $request)
-    // {
-    //     // Puis déconnexion standard
-    //     Auth::logout();
-    //     $request->session()->invalidate();
-    //     $request->session()->regenerateToken();
-
-    //     return redirect()->route('login');
-    // }
-
-    // App\Http\Controllers\AdminController.php
 
     public function logout(Request $request)
     {

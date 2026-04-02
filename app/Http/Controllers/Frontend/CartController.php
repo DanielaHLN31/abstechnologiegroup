@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Auth;
 class CartController extends Controller
 {
     // ================================================================
-    // HELPERS — identifier le panier (user connecté ou session)
+    // HELPERS
     // ================================================================
 
     private function cartQuery()
@@ -22,40 +22,58 @@ class CartController extends Controller
         return CartItem::where('session_id', session()->getId());
     }
 
-    private function cartOwner(): array
+    public static function mergeSessionCart(string $sessionId = null): void
     {
-        if (Auth::check()) {
-            return ['user_id' => Auth::id(), 'session_id' => null];
-        }
-        return ['user_id' => null, 'session_id' => session()->getId()];
-    }
-
-    /**
-     * Fusionner le panier session → panier utilisateur après connexion.
-     * À appeler dans le LoginController après authentification.
-     */
-    public static function mergeSessionCart(): void
-    {
-        $sessionId = session()->getId();
+        $sessionId = $sessionId ?? session()->getId();
         $userId    = Auth::id();
 
-        CartItem::where('session_id', $sessionId)->each(function ($item) use ($userId) {
+        \Log::info('CART::MERGE - début', [
+            'session_id' => $sessionId,
+            'user_id'    => $userId,
+        ]);
+
+        $items = CartItem::where('session_id', $sessionId)->get();
+
+        \Log::info('CART::MERGE - articles trouvés', [
+            'count' => $items->count(),
+            'items' => $items->toArray(),
+        ]);
+
+        if ($items->isEmpty()) {
+            \Log::info('CART::MERGE - rien à fusionner, fin');
+            return;
+        }
+
+        $items->each(function ($item) use ($userId) {
             $existing = CartItem::where('user_id', $userId)
                 ->where('product_id', $item->product_id)
                 ->where('color_id', $item->color_id)
                 ->first();
 
             if ($existing) {
+                \Log::info('CART::MERGE - article existant, incrément quantité', [
+                    'existing_id'  => $existing->id,
+                    'add_quantity' => $item->quantity,
+                ]);
                 $existing->increment('quantity', $item->quantity);
                 $item->delete();
             } else {
+                \Log::info('CART::MERGE - transfert session → user', [
+                    'item_id'    => $item->id,
+                    'product_id' => $item->product_id,
+                    'user_id'    => $userId,
+                ]);
                 $item->update(['user_id' => $userId, 'session_id' => null]);
             }
         });
+
+        \Log::info('CART::MERGE - terminé', [
+            'total_items_user' => CartItem::where('user_id', $userId)->count(),
+        ]);
     }
 
     // ================================================================
-    // INDEX — page panier
+    // INDEX
     // ================================================================
 
     public function index()
@@ -70,11 +88,18 @@ class CartController extends Controller
     }
 
     // ================================================================
-    // ADD — ajouter un produit
+    // ADD — accessible sans authentification
     // ================================================================
 
     public function add(Request $request)
     {
+        \Log::info('CART::ADD - APPEL REÇU', [
+            'is_auth'    => Auth::check(),
+            'user_id'    => Auth::id(),
+            'session_id' => session()->getId(),
+            'product_id' => $request->product_id,
+            'all_input'  => $request->all(),
+        ]);
         $request->validate([
             'product_id' => 'required|exists:products,id',
             'quantity'   => 'required|integer|min:1',
@@ -85,32 +110,34 @@ class CartController extends Controller
         $colorId  = $request->color_id ?: null;
         $quantity = (int) $request->quantity;
 
-        // Vérification stock
         if ($product->stock_quantity < 1) {
             return response()->json(['message' => 'Ce produit est en rupture de stock.'], 422);
         }
 
-        // Chercher un article existant dans le panier
         $existing = $this->cartQuery()
             ->where('product_id', $product->id)
             ->where('color_id', $colorId)
             ->first();
 
         if ($existing) {
-            $newQty = $existing->quantity + $quantity;
-
-            // Ne pas dépasser le stock disponible
-            if ($newQty > $product->stock_quantity) {
-                $newQty = $product->stock_quantity;
-            }
-
+            $newQty = min($existing->quantity + $quantity, $product->stock_quantity);
             $existing->update(['quantity' => $newQty]);
         } else {
-            CartItem::create(array_merge($this->cartOwner(), [
+            $data = [
                 'product_id' => $product->id,
                 'color_id'   => $colorId,
                 'quantity'   => min($quantity, $product->stock_quantity),
-            ]));
+            ];
+
+            if (Auth::check()) {
+                $data['user_id']    = Auth::id();
+                $data['session_id'] = null;
+            } else {
+                $data['user_id']    = null;
+                $data['session_id'] = session()->getId();
+            }
+
+            CartItem::create($data);
         }
 
         $cartCount = $this->cartQuery()->sum('quantity');
@@ -122,7 +149,7 @@ class CartController extends Controller
     }
 
     // ================================================================
-    // UPDATE — modifier la quantité
+    // UPDATE
     // ================================================================
 
     public function update(Request $request)
@@ -134,9 +161,7 @@ class CartController extends Controller
 
         $item = $this->cartQuery()->findOrFail($request->item_id);
 
-        // Vérification stock
-        $max = $item->product->stock_quantity;
-        $qty = min((int) $request->quantity, $max);
+        $qty = min((int) $request->quantity, $item->product->stock_quantity);
         $item->update(['quantity' => $qty]);
 
         $subtotal  = $this->cartQuery()->with('product')->get()
@@ -153,7 +178,7 @@ class CartController extends Controller
     }
 
     // ================================================================
-    // REMOVE — supprimer un article
+    // REMOVE
     // ================================================================
 
     public function remove(Request $request)
@@ -177,18 +202,17 @@ class CartController extends Controller
     }
 
     // ================================================================
-    // CLEAR — vider le panier
+    // CLEAR
     // ================================================================
 
     public function clear()
     {
         $this->cartQuery()->delete();
-
         return response()->json(['message' => 'Panier vidé.']);
     }
 
     // ================================================================
-    // COUNT — pour le badge header (endpoint AJAX optionnel)
+    // COUNT
     // ================================================================
 
     public function count()
@@ -196,39 +220,35 @@ class CartController extends Controller
         return response()->json(['count' => $this->cartQuery()->sum('quantity')]);
     }
 
-    
-/**
- * Endpoint AJAX pour le sidebar panier du header.
- * Route : GET /client/cart/sidebar
- */
-public function sidebar()
-{
-    $cartItems = $this->cartQuery()
-        ->with(['product.images', 'color'])
-        ->get();
+    // ================================================================
+    // SIDEBAR
+    // ================================================================
 
-    $items = $cartItems->map(function ($item) {
-        return [
-            'id'         => $item->id,
-            'product_id' => $item->product_id,
-            'name'       => $item->product->name,
-            'price'      => $item->product->price,
-            'quantity'   => $item->quantity,
-            'image'      => $item->product->images->first()?->image_path ?? null,
-            'color'      => $item->color ? [
-                'name' => $item->color->name,
-                'code' => $item->color->code,
-            ] : null,
-        ];
-    });
+    public function sidebar()
+    {
+        $cartItems = $this->cartQuery()
+            ->with(['product.images', 'color'])
+            ->get();
 
-    $total = $cartItems->sum(fn($i) => $i->product->price * $i->quantity);
-    $count = $cartItems->sum('quantity');
+        $items = $cartItems->map(function ($item) {
+            return [
+                'id'         => $item->id,
+                'product_id' => $item->product_id,
+                'name'       => $item->product->name,
+                'price'      => $item->product->price,
+                'quantity'   => $item->quantity,
+                'image'      => $item->product->images->first()?->image_path ?? null,
+                'color'      => $item->color ? [
+                    'name' => $item->color->name,
+                    'code' => $item->color->code,
+                ] : null,
+            ];
+        });
 
-    return response()->json([
-        'items' => $items,
-        'total' => $total,
-        'count' => $count,
-    ]);
-}
+        return response()->json([
+            'items' => $items,
+            'total' => $cartItems->sum(fn($i) => $i->product->price * $i->quantity),
+            'count' => $cartItems->sum('quantity'),
+        ]);
+    }
 }

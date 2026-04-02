@@ -10,7 +10,6 @@ use Illuminate\Http\Request;
 class NotificationController extends Controller
 {
     /**
-     * GET /admin/notifications
      * Retourne les notifications non lues (pour le badge + dropdown)
      */
     public function index()
@@ -30,7 +29,6 @@ class NotificationController extends Controller
     }
 
     /**
-     * POST /admin/notifications/{id}/read
      * Marque une notification comme lue puis dispatch le job de suppression (délai 1 min)
      */
     public function markRead($id)
@@ -45,7 +43,6 @@ class NotificationController extends Controller
     }
 
     /**
-     * POST /admin/notifications/read-all
      * Marque toutes comme lues puis dispatch le job de suppression (délai 1 min)
      */
     public function markAllRead()

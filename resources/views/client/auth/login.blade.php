@@ -208,7 +208,7 @@
 
             <form id="login-form" class="mb-3" action="{{ route('client.login.Store') }}" method="POST">
                 @csrf
-
+                <input type="hidden" name="cart_session_id" value="{{ session()->getId() }}">
                 <div class="mb-3">
                     <label for="email" class="form-label">Email</label>
                     <input type="email"

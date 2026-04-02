@@ -15,14 +15,14 @@
 
     <meta name="description" content="Accédez à votre compte en toute sécurité. Saisissez vos identifiants pour utiliser les fonctionnalités de la plateforme." />
     <!-- Favicon -->
-    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('backend/img/favicon/goodtroc_logo.png')}}" />
-    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('backend/img/favicon/goodtroc_logo.png')}}" />
-    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('backend/img/favicon/goodtroc_logo.png')}}" />
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('backend/img/favicon/favicon.png')}}" />
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('backend/img/favicon/favicon.png')}}" />
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('backend/img/favicon/favicon.png')}}" />
     <meta name="csrf-token" content="{{ csrf_token() }}">
     {{--<link rel="manifest" href="{{ asset('frontend/images/favicons/site.html')}}" />--}}
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://staff-goodtroc.com/">
-    <meta name="image" content="{{ asset('backend/img/favicon/goodtroc_logo.png')}}">
+    <meta name="image" content="{{ asset('backend/img/favicon/favicon.png')}}">
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />

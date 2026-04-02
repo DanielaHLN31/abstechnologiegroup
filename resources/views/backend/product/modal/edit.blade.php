@@ -39,18 +39,18 @@
                             </div>
                             <div class="invalid-feedback"></div>
                         </div>
-                    </div>
-
-                    <div class="row g-3">
-                        <div class="col-md-4 mb-3">
+                        {{-- <div class="col-md-3 mb-3">
                             <label class="form-label">Prix barré (promo)</label>
                             <div class="input-group">
                                 <span class="input-group-text">FCFA</span>
                                 <input type="number" name="compare_price" id="edit_compare_price" class="form-control" min="0" step="0.01" />
                             </div>
                             <div class="invalid-feedback"></div>
-                        </div>
-                        <div class="col-md-4 mb-3">
+                        </div> --}}
+                    </div>
+
+                    <div class="row g-3">
+                        <div class="col-md-6 mb-3">
                             <label class="form-label required">Catégorie</label>
                             <select name="category_id" id="edit_category_id" class="form-select" required>
                                 <option value="">Sélectionnez une catégorie</option>
@@ -60,7 +60,7 @@
                             </select>
                             <div class="invalid-feedback"></div>
                         </div>
-                        <div class="col-md-4 mb-3">
+                        <div class="col-md-6 mb-3">
                             <label class="form-label required">Marque</label>
                             <select name="brand_id" id="edit_brand_id" class="form-select" required>
                                 <option value="">Sélectionnez une marque</option>
@@ -114,7 +114,7 @@
                                     <div class="edit-color-item mb-3 border rounded p-2">
                                         <div class="row g-2 align-items-end">
                                             <input type="hidden" data-field="color_db_id" value="">
-                                            <div class="col-md-3">
+                                            {{-- <div class="col-md-3">
                                                 <label class="form-label small">Couleur existante</label>
                                                 <select data-field="color_id" class="form-select form-select-sm edit-existing-color-select">
                                                     <option value="">-- Créer nouvelle --</option>
@@ -122,8 +122,8 @@
                                                         <option value="{{ $color->id }}" data-code="{{ $color->code }}">{{ $color->name }}</option>
                                                     @endforeach
                                                 </select>
-                                            </div>
-                                            <div class="col-md-4">
+                                            </div> --}}
+                                            <div class="col-md-6">
                                                 <label class="form-label small">Couleur personnalisée</label>
                                                 <div class="d-flex gap-2 align-items-center">
                                                     <input type="color" data-field="color_code"
@@ -134,7 +134,7 @@
                                                            placeholder="Nom (ex: Bleu nuit)" />
                                                 </div>
                                             </div>
-                                            <div class="col-md-3">
+                                            <div class="col-md-4">
                                                 <label class="form-label small">Stock</label>
                                                 <input type="number" data-field="color_stock"
                                                        class="form-control form-control-sm edit-color-stock"
@@ -233,7 +233,7 @@
                     </div>
 
                     {{-- ── SEO ───────────────────────────────────── --}}
-                    <div class="row">
+                    {{-- <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Meta titre</label>
                             <input type="text" name="meta_title" id="edit_meta_title" class="form-control" />
@@ -242,7 +242,7 @@
                             <label class="form-label">Meta description</label>
                             <textarea name="meta_description" id="edit_meta_description" class="form-control" rows="2"></textarea>
                         </div>
-                    </div>
+                    </div> --}}
 
                     {{-- ── Boutons ───────────────────────────────── --}}
                     <div class="d-flex justify-content-end gap-2 mt-3">

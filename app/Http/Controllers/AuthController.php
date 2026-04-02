@@ -111,16 +111,26 @@ class AuthController extends Controller
             Log::info('Premier login - Mot de passe défini', ['user_id' => $user->id]);
         }
 
-        // Tentative d'authentification
-        if (Auth::attempt(['email' => $email, 'password' => $password], $remember)) {
-            $request->session()->regenerate();
 
-            Log::info('Connexion réussie', [
-                'user_id' => Auth::id(),
-                'session_id' => session()->getId(),
-                'remember' => $remember
+        if (Auth::attempt(['email' => $email, 'password' => $password], $remember)) {
+            $oldSessionId = session()->getId();
+            
+            // 🔍 DIAGNOSTIC
+            $cartCount = \App\Models\CartItem::where('session_id', $oldSessionId)->count();
+            Log::info('CART MERGE DEBUG', [
+                'old_session_id'   => $oldSessionId,
+                'cart_items_found' => $cartCount,
+                'all_session_items'=> \App\Models\CartItem::whereNotNull('session_id')->get(['session_id','product_id','quantity'])->toArray(),
             ]);
 
+            $request->session()->regenerate();
+            CartController::mergeSessionCart($oldSessionId);
+
+            Log::info('Connexion réussie', [
+                        'user_id' => Auth::id(),
+                        'session_id' => session()->getId(),
+                        'remember' => $remember
+                    ]);
             return redirect()->intended(route('dashboardVendors'));
         }
 
@@ -258,160 +268,129 @@ class AuthController extends Controller
 
     public function ClientLoginFormStore(Request $request)
     {
-        // Validation de base
+        // Capturer le session ID AVANT toute opération
+        // (celui passé depuis le formulaire, qui correspond à la session de navigation)
+        $cartSessionId = $request->input('cart_session_id') ?? session()->getId();
+        
+        \Log::info('CART::SESSION-IDS', [
+            'cart_session_id_from_form'    => $cartSessionId,
+            'current_session_id'           => session()->getId(),
+            'items_with_form_session'      => \App\Models\CartItem::where('session_id', $cartSessionId)->count(),
+        ]);
+
         $request->validate([
-            'email' => 'required|email',
+            'email'    => 'required|email',
             'password' => 'required|string',
         ], [
-            'email.required' => "Veuillez insérer votre email",
-            'email.email' => "Format d'email invalide",
+            'email.required'    => "Veuillez insérer votre email",
+            'email.email'       => "Format d'email invalide",
             'password.required' => "Veuillez insérer votre mot de passe",
         ]);
 
-        $email = $request->input('email');
+        $email    = $request->input('email');
         $password = $request->input('password');
         $remember = $request->has('remember');
 
-        // Recherche de l'utilisateur
         $user = User::where('email', $email)->first();
 
         if (!$user) {
-            return back()
-                ->withInput($request->only('email'))
+            return back()->withInput($request->only('email'))
                 ->withErrors(['message' => 'Email ou mot de passe incorrect']);
         }
 
-        // Vérification du statut de l'utilisateur
         if ($user->status == 2) {
-            return back()
-                ->withInput($request->only('email'))
+            return back()->withInput($request->only('email'))
                 ->withErrors(['message' => 'Votre compte est en attente de validation.']);
         }
 
         if ($user->status == 0) {
-            return back()
-                ->withInput($request->only('email'))
+            return back()->withInput($request->only('email'))
                 ->withErrors(['message' => 'Votre compte a été désactivé.']);
         }
 
-        // Vérifier si c'est un client
-        $client = Client::where('user_id', $user->id)->first();
-        
-        // Vérifier si c'est un admin (personnel)
+        $client    = Client::where('user_id', $user->id)->first();
         $personnel = Personnel::where('id', $user->personnel_id)->first();
 
-        // Cas du premier login avec mot de passe par défaut
         $isFirstLogin = !$user->password || Hash::check('CLEAN', $user->password);
 
-        
-        Log::info('TEST', [
-            'personnel' => $personnel,
-            'client' => $client,
-            'user' => $user->personnel_id,
-        ]);
-
         if ($isFirstLogin) {
-            // Validation de la confirmation du mot de passe
             $request->validate([
-                'password' => 'required|string|min:8',
-                'password_confirmation' => 'required|same:password'
+                'password'              => 'required|string|min:8',
+                'password_confirmation' => 'required|same:password',
             ], [
-                'password.min' => 'Le mot de passe doit contenir au moins 8 caractères.',
-                'password_confirmation.required' => 'Veuillez confirmer votre mot de passe.',
-                'password_confirmation.same' => 'Les mots de passe ne correspondent pas.'
+                'password.min'                  => 'Le mot de passe doit contenir au moins 8 caractères.',
+                'password_confirmation.required'=> 'Veuillez confirmer votre mot de passe.',
+                'password_confirmation.same'    => 'Les mots de passe ne correspondent pas.',
             ]);
 
-            // Mise à jour du mot de passe
             $user->password = Hash::make($password);
             $user->save();
-
-            Log::info('Premier login - Mot de passe défini', ['user_id' => $user->id]);
         }
 
-        // Tentative d'authentification
         if (Auth::attempt(['email' => $email, 'password' => $password], $remember)) {
+
             $request->session()->regenerate();
 
-            // Recharger l'utilisateur après connexion
-            $user = Auth::user();
-            $client = Client::where('user_id', $user->id)->first();
+            // ✅ Utiliser le session ID du formulaire (pas celui post-regenerate)
+            \Log::info('CART::MERGE-ATTEMPT', [
+                'cart_session_id' => $cartSessionId,
+                'user_id'         => Auth::id(),
+                'items_found'     => \App\Models\CartItem::where('session_id', $cartSessionId)->count(),
+            ]);
+
+            CartController::mergeSessionCart($cartSessionId);
+
+            // Recharger après connexion
+            $user      = Auth::user();
+            $client    = Client::where('user_id', $user->id)->first();
             $personnel = Personnel::where('id', $user->personnel_id)->first();
 
-            // 🔥 CAS 1: Admin sans compte client → Création automatique
+            // Création automatique du profil client pour admin
             if ($personnel && !$client) {
                 DB::beginTransaction();
                 try {
-                    // Créer automatiquement le profil client pour l'admin
                     $client = Client::create([
                         'user_id' => $user->id,
-                        'phone' => $personnel->telephone ?? null,
+                        'phone'   => $personnel->telephone ?? null,
                         'address' => $personnel->adresse ?? null,
-                        'city' => $personnel->ville_de_residence ?? null,
+                        'city'    => $personnel->ville_de_residence ?? null,
                         'country' => 'Bénin',
                     ]);
-                    
-                    Log::info('Profil client créé automatiquement pour admin', [
-                        'user_id' => $user->id,
-                        'email' => $user->email,
-                        'client_id' => $client->id
-                    ]);
-                    
                     DB::commit();
-                    
-                    // Message de bienvenue
                     session()->flash('success', 'Votre compte client a été créé automatiquement. Bienvenue !');
-                    
                 } catch (\Exception $e) {
                     DB::rollBack();
                     Log::error('Erreur création auto profil client', [
                         'user_id' => $user->id,
-                        'error' => $e->getMessage()
+                        'error'   => $e->getMessage(),
                     ]);
                 }
             }
 
-            // 🔥 CAS 2: Client normal
-            if ($client) {
-                try {
-                    CartController::mergeSessionCart();
-                } catch (\Exception $e) {
-                    Log::error('Erreur fusion panier: ' . $e->getMessage());
-                }
-            }
-
-            // Journalisation
             Log::info('Connexion réussie', [
-                'user_id' => $user->id,
-                'email' => $user->email,
-                'has_client' => $client ? true : false,
-                'has_personnel' => $personnel ? true : false
+                'user_id'       => $user->id,
+                'email'         => $user->email,
+                'has_client'    => (bool) $client,
+                'has_personnel' => (bool) $personnel,
             ]);
 
-            // 🔥 Redirection intelligente
-            if ($personnel && !$client) {
-                // Cas théoriquement impossible maintenant (client vient d'être créé)
-                // Mais on garde la redirection admin par défaut
-                return redirect()->intended(route('dashboardVendors'));
-            }
-            
+            // Redirection intelligente
             if ($personnel && $client) {
-                // L'utilisateur a les deux rôles
-                // On peut lui permettre de choisir ou rediriger par défaut
                 if ($request->has('as_admin') && $request->as_admin == '1') {
                     return redirect()->intended(route('dashboardVendors'));
                 }
-                
-                // Par défaut, rediriger vers l'accueil client avec une notification
-                session()->flash('info', 'Vous êtes connecté en tant que client. Pour accéder à l\'administration, utilisez le menu dédié.');
-                return redirect()->intended(route('client.index'));
-            }
-            
-            if ($client && !$personnel) {
-                // Client uniquement
+                session()->flash('info', 'Vous êtes connecté en tant que client.');
                 return redirect()->intended(route('client.index'));
             }
 
-            // Cas improbable (ni client ni admin après création auto)
+            if ($personnel && !$client) {
+                return redirect()->intended(route('dashboardVendors'));
+            }
+
+            if ($client && !$personnel) {
+                return redirect()->intended(route('client.index'));
+            }
+
             Auth::logout();
             return redirect()->route('client.register')
                 ->with('error', 'Une erreur est survenue. Veuillez contacter le support.');
@@ -419,8 +398,7 @@ class AuthController extends Controller
 
         Log::warning('Échec d\'authentification', ['email' => $email]);
 
-        return back()
-            ->withInput($request->only('email'))
+        return back()->withInput($request->only('email'))
             ->withErrors(['message' => 'Email ou mot de passe incorrect']);
     }
 }

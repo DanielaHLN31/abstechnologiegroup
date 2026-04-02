@@ -29,7 +29,7 @@ use App\Http\Controllers\Backend\NotificationController;
 // ==================== ROUTES PUBLIQUES ====================
 Route::middleware('guest')->group(function () {
     // Admin login
-    Route::get('/', [AuthController::class, 'login'])->name('login');
+    Route::get('/login', [AuthController::class, 'login'])->name('login');
     Route::post('/login/store', [AuthController::class, 'LoginFormStore'])->name('login.Store');
 
     // Client login/register
@@ -51,9 +51,9 @@ Route::get('/politique-de-confidentialite' , function(){
 Route::post('/check-user', [AuthController::class, 'checkUser'])->name('check.user');
 
 // ==================== ROUTES CLIENT PUBLIQUES ====================
+Route::get('/', [ClientController::class, 'index'])->name('client.index');
 Route::prefix('client')->name('client.')->group(function () {
     // Pages publiques (accessibles sans connexion)
-    Route::get('/index', [ClientController::class, 'index'])->name('index');
     Route::get('/about', [ClientController::class, 'about'])->name('about');
     Route::get('/product', [ClientController::class, 'product'])->name('product');
     Route::get('/products/{id}', [ClientController::class, 'show'])->name('product.detail');
@@ -150,7 +150,7 @@ Route::middleware(['auth.admin'])->group(function () {
         Route::get('/edit/{id}',[ProductController::class,'Editproducts'])->name('edit.products');
         Route::post('/update',[ProductController::class,'Updateproducts'])->name('update.products');
         Route::get('/{id}', [ProductController::class, 'ShowProduct'])->name('show.product');
-        Route::delete('/{id}', [ProductController::class, 'DeleteProduct']);
+        Route::delete('/delete/{id}', [ProductController::class, 'DeleteProduct']);
         Route::post('/{id}/status', [ProductController::class, 'ToggleStatus']);
     });
 
@@ -203,11 +203,11 @@ Route::middleware(['auth.admin'])->group(function () {
 
 });
 
-    // Paiements (protégés par auth)
-    Route::post('/payment/initiate', [PaymentController::class, 'initiate'])->name('payment.initiate');
-    Route::post('/payment/check-status', [PaymentController::class, 'checkStatus'])->name('payment.check-status');
-    Route::post('/payment/callback', [PaymentController::class, 'callback'])->name('payment.callback');
-// ==================== WEBHOOK (PUBLIC) ====================
-Route::post('/payment/webhook/fedapay', [PaymentController::class, 'webhook'])
-    ->name('payment.webhook.fedapay')
+
+Route::get('/payment/callback', [PaymentController::class, 'callback'])
+    ->name('payment.callback');
+ 
+// ✅ WEBHOOK en POST  (FedaPay appelle ce endpoint serveur-to-serveur)
+Route::post('/payment/webhook', [PaymentController::class, 'webhook'])
+    ->name('payment.webhook')
     ->withoutMiddleware([\App\Http\Middleware\VerifyCsrfToken::class]);
