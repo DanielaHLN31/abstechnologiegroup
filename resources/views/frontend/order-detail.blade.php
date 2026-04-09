@@ -1,6 +1,5 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
+@extends('client.layout')
+@push('links')
     <title>Détail Commande - ABS TECHNOLOGIE</title>
     @include('client.body.head')
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -461,10 +460,9 @@
         }
     </style>
 </head>
-<body class="animsition">
-    
-    @include('client.body.header')
-    @include('frontend.modal')
+@endpush
+
+@section('content')
 
     <div class="container p-t-80 p-b-80">
 
@@ -551,7 +549,7 @@
                     <div class="order-item">
                         <div class="item-image">
                             @if($item->product_image)
-                                <img src="{{ asset('storage/'.$item->product_image) }}" alt="{{ $item->product_name }}">
+                                <img src="{{ asset('storage/'.$item->product_image) }}" alt="{{ $item->product_name }}" loading="lazy">
                             @else
                                 <i class="fas fa-image"></i>
                             @endif
@@ -673,17 +671,10 @@
 
     </div>
 
-    @include('client.body.footer')
+@endsection
 
-    <script src="{{ asset('frontend/vendor/jquery/jquery-3.2.1.min.js') }}"></script>
-    <script src="{{ asset('frontend/vendor/animsition/js/animsition.min.js') }}"></script>
-    <script src="{{ asset('frontend/vendor/bootstrap/js/popper.js') }}"></script>
-    <script src="{{ asset('frontend/vendor/bootstrap/js/bootstrap.min.js') }}"></script>
-    <script src="{{ asset('frontend/vendor/select2/select2.min.js') }}"></script>
-    <script src="{{ asset('frontend/vendor/sweetalert/sweetalert.min.js') }}"></script>
-    <script src="{{ asset('frontend/js/main.js') }}"></script>
-    
-    @include('frontend.global_js')
+
+@push('scripts')
 
     <script>
         $(document).ready(function() {
@@ -697,5 +688,5 @@
             });
         });
     </script>
-</body>
-</html>
+@endpush
+@stack('scripts')

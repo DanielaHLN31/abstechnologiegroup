@@ -1,6 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+@extends('client.layout')
+@push('links')
     
     <title>Contact ABS TECHNOLOGIE</title>
     @include('client.body.head')
@@ -15,155 +14,155 @@
 			background-color: white !important;
 		}
 	</style>
-</head>
-<body class="animsition">
+@endpush
+
+    
+
+@section('content')
 	
-	<!-- Header -->
-	@include('client.body.header')
-    @include('frontend.modal')
 
 	<!-- Title page -->
 	
-<div class="ct-hero">
+    <div class="ct-hero">
 
-    {{-- Accent gauche --}}
-    <div class="ct-hero__accent"></div>
+        {{-- Accent gauche --}}
+        <div class="ct-hero__accent"></div>
 
-    {{-- Motif de fond --}}
-    <div class="ct-hero__bg">
-        <svg viewBox="0 0 560 560" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="280" cy="280" r="260" stroke="#0066CC" stroke-width="1"/>
-            <circle cx="280" cy="280" r="210" stroke="#0066CC" stroke-width="1"/>
-            <circle cx="280" cy="280" r="160" stroke="#0066CC" stroke-width="1"/>
-            <circle cx="280" cy="280" r="110" stroke="#0066CC" stroke-width="1"/>
-            <circle cx="280" cy="280" r="60"  stroke="#0066CC" stroke-width="1"/>
-            <!-- Points aux intersections -->
-            <circle cx="280" cy="20"  r="3" fill="#0066CC"/>
-            <circle cx="540" cy="280" r="3" fill="#0066CC"/>
-            <circle cx="280" cy="540" r="3" fill="#0066CC"/>
-            <circle cx="20"  cy="280" r="3" fill="#0066CC"/>
-            <!-- Lignes diagonales légères -->
-            <line x1="280" y1="20"  x2="280" y2="540" stroke="#0066CC" stroke-width="0.5" stroke-dasharray="4 8"/>
-            <line x1="20"  y1="280" x2="540" y2="280" stroke="#0066CC" stroke-width="0.5" stroke-dasharray="4 8"/>
-            <line x1="96"  y1="96"  x2="464" y2="464" stroke="#0066CC" stroke-width="0.5" stroke-dasharray="4 8"/>
-            <line x1="464" y1="96"  x2="96"  y2="464" stroke="#0066CC" stroke-width="0.5" stroke-dasharray="4 8"/>
-        </svg>
-    </div>
+        {{-- Motif de fond --}}
+        <div class="ct-hero__bg">
+            <svg viewBox="0 0 560 560" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="280" cy="280" r="260" stroke="#0066CC" stroke-width="1"/>
+                <circle cx="280" cy="280" r="210" stroke="#0066CC" stroke-width="1"/>
+                <circle cx="280" cy="280" r="160" stroke="#0066CC" stroke-width="1"/>
+                <circle cx="280" cy="280" r="110" stroke="#0066CC" stroke-width="1"/>
+                <circle cx="280" cy="280" r="60"  stroke="#0066CC" stroke-width="1"/>
+                <!-- Points aux intersections -->
+                <circle cx="280" cy="20"  r="3" fill="#0066CC"/>
+                <circle cx="540" cy="280" r="3" fill="#0066CC"/>
+                <circle cx="280" cy="540" r="3" fill="#0066CC"/>
+                <circle cx="20"  cy="280" r="3" fill="#0066CC"/>
+                <!-- Lignes diagonales légères -->
+                <line x1="280" y1="20"  x2="280" y2="540" stroke="#0066CC" stroke-width="0.5" stroke-dasharray="4 8"/>
+                <line x1="20"  y1="280" x2="540" y2="280" stroke="#0066CC" stroke-width="0.5" stroke-dasharray="4 8"/>
+                <line x1="96"  y1="96"  x2="464" y2="464" stroke="#0066CC" stroke-width="0.5" stroke-dasharray="4 8"/>
+                <line x1="464" y1="96"  x2="96"  y2="464" stroke="#0066CC" stroke-width="0.5" stroke-dasharray="4 8"/>
+            </svg>
+        </div>
 
-    <div class="ct-hero__inner">
+        <div class="ct-hero__inner">
 
 
-        <div class="ct-hero__body">
+            <div class="ct-hero__body">
 
-            {{-- Gauche --}}
-            <div class="ct-hero__left">
+                {{-- Gauche --}}
+                <div class="ct-hero__left">
 
-                <div class="ct-hero__pill">
-                    <span class="ct-hero__pill-dot"></span>
-                    Nous sommes disponibles
+                    <div class="ct-hero__pill">
+                        <span class="ct-hero__pill-dot"></span>
+                        Nous sommes disponibles
+                    </div>
+
+                    <h1 class="ct-hero__title">
+                        Parlons de votre<br><span>projet</span>
+                    </h1>
+
+                    <p class="ct-hero__sub">
+                        Notre équipe est à votre écoute du lundi au samedi.
+                        Showroom, téléphone ou email — choisissez le canal qui vous convient.
+                    </p>
+
+                    {{-- Infos rapides --}}
+                    <div class="ct-hero__quick">
+                        <div class="ct-hero__quick-item">
+                            <div class="ct-hero__quick-icon">
+                                <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                            </div>
+                            CAMP-GUEZO, face à l'Hôpital des Armées (HIA) — Cotonou
+                        </div>
+                        <div class="ct-hero__quick-item">
+                            <div class="ct-hero__quick-icon">
+                                <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                            </div>
+                            +229 01 61 06 26 26 &nbsp;·&nbsp; +229 01 96 06 26 26
+                        </div>
+                        <div class="ct-hero__quick-item">
+                            <div class="ct-hero__quick-icon">
+                                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                            </div>
+                            Lundi – Samedi : 9h00 – 18h00
+                        </div>
+                    </div>
+
                 </div>
 
-                <h1 class="ct-hero__title">
-                    Parlons de votre<br><span>projet</span>
-                </h1>
+                {{-- Droite : carte CTA --}}
+                <div class="ct-hero__right">
+                    <div class="ct-hero__card">
 
-                <p class="ct-hero__sub">
-                    Notre équipe est à votre écoute du lundi au samedi.
-                    Showroom, téléphone ou email — choisissez le canal qui vous convient.
-                </p>
-
-                {{-- Infos rapides --}}
-                <div class="ct-hero__quick">
-                    <div class="ct-hero__quick-item">
-                        <div class="ct-hero__quick-icon">
-                            <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                        </div>
-                        CAMP-GUEZO, face à l'Hôpital des Armées (HIA) — Cotonou
-                    </div>
-                    <div class="ct-hero__quick-item">
-                        <div class="ct-hero__quick-icon">
-                            <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-                        </div>
-                        +229 01 61 06 26 26 &nbsp;·&nbsp; +229 01 96 06 26 26
-                    </div>
-                    <div class="ct-hero__quick-item">
-                        <div class="ct-hero__quick-icon">
-                            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                        </div>
-                        Lundi – Samedi : 9h00 – 18h00
-                    </div>
-                </div>
-
-            </div>
-
-            {{-- Droite : carte CTA --}}
-            <div class="ct-hero__right">
-                <div class="ct-hero__card">
-
-                    <div class="ct-hero__card-head">
-                        <div class="ct-hero__card-avatar">
-                            <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
-                        </div>
-                        <div>
-                            <div class="ct-hero__card-title">Équipe ABS Technologie</div>
-                            <div class="ct-hero__card-online">
-                                <span class="ct-hero__card-online-dot"></span>
-                                Disponible maintenant
+                        <div class="ct-hero__card-head">
+                            <div class="ct-hero__card-avatar">
+                                <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+                            </div>
+                            <div>
+                                <div class="ct-hero__card-title">Équipe ABS Technologie</div>
+                                <div class="ct-hero__card-online">
+                                    <span class="ct-hero__card-online-dot"></span>
+                                    Disponible maintenant
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="ct-hero__card-links">
+                        <div class="ct-hero__card-links">
 
-                        <a href="#contact" class="ct-hero__card-link">
-                            <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-                            Envoyer un message
-                            <svg class="ct-link-arrow" viewBox="0 0 24 24" width="14" height="14"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                        </a>
+                            <a href="#contact" class="ct-hero__card-link">
+                                <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                                Envoyer un message
+                                <svg class="ct-link-arrow" viewBox="0 0 24 24" width="14" height="14"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                            </a>
 
-                        <a href="tel:+22901610626 26" class="ct-hero__card-link">
-                            <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-                            Appeler directement
-                            <svg class="ct-link-arrow" viewBox="0 0 24 24" width="14" height="14"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                        </a>
+                            <a href="tel:+22901610626 26" class="ct-hero__card-link">
+                                <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                                Appeler directement
+                                <svg class="ct-link-arrow" viewBox="0 0 24 24" width="14" height="14"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                            </a>
 
-                        <a href="https://wa.me/2290196062626" target="_blank" class="ct-hero__card-link">
-                            <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
-                            WhatsApp
-                            <svg class="ct-link-arrow" viewBox="0 0 24 24" width="14" height="14"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                        </a>
+                            <a href="https://wa.me/2290196062626" target="_blank" class="ct-hero__card-link">
+                                <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+                                WhatsApp
+                                <svg class="ct-link-arrow" viewBox="0 0 24 24" width="14" height="14"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                            </a>
 
-                        <a href="#showroom" class="ct-hero__card-link">
-                            <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                            Voir le showroom
-                            <svg class="ct-link-arrow" viewBox="0 0 24 24" width="14" height="14"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                        </a>
+                            <a href="#showroom" class="ct-hero__card-link">
+                                <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                                Voir le showroom
+                                <svg class="ct-link-arrow" viewBox="0 0 24 24" width="14" height="14"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                            </a>
 
+                        </div>
                     </div>
                 </div>
+
             </div>
-
         </div>
+
+        {{-- Barre ancres --}}
+        <nav class="ct-hero__nav">
+            <div class="ct-hero__nav-inner">
+
+                <a href="#showroom" class="ct-hero__nav-link active">
+                    <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                    Showroom
+                </a>
+
+                <a href="#contact" class="ct-hero__nav-link">
+                    <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                    Formulaire de contact
+                </a>
+
+            </div>
+        </nav>
+
     </div>
-
-    {{-- Barre ancres --}}
-    <nav class="ct-hero__nav">
-        <div class="ct-hero__nav-inner">
-
-            <a href="#showroom" class="ct-hero__nav-link active">
-                <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-                Showroom
-            </a>
-
-            <a href="#contact" class="ct-hero__nav-link">
-                <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-                Formulaire de contact
-            </a>
-
-        </div>
-    </nav>
-
-</div>
 
 
 	<!-- Content page -->
@@ -374,57 +373,18 @@
         </div>
     </section>
 	
-	
-
-
-	@include('client.body.footer')
-
     <div id="toast-container" style="position: fixed; top: 20px; right: 20px; z-index: 99999;"></div>
-<!--===============================================================================================-->	
-	<script src="{{ asset('frontend/vendor/jquery/jquery-3.2.1.min.js') }}"></script>
-<!--===============================================================================================-->
-	<script src="{{ asset('frontend/vendor/animsition/js/animsition.min.js') }}"></script>
-<!--===============================================================================================-->
-	<script src="{{ asset('frontend/vendor/bootstrap/js/popper.js') }}"></script>
-	<script src="{{ asset('frontend/vendor/bootstrap/js/bootstrap.min.js') }}"></script>
-<!--===============================================================================================-->
-	<script src="{{ asset('frontend/vendor/select2/select2.min.js') }}"></script>
-	<script>
-		$(".js-select2").each(function(){
-			$(this).select2({
-				minimumResultsForSearch: 20,
-				dropdownParent: $(this).next('.dropDownSelect2')
-			});
-		})
-	</script>
-<!--===============================================================================================-->
-	<script src="{{ asset('frontend/vendor/MagnificPopup/jquery.magnific-popup.min.js') }}"></script>
-<!--===============================================================================================-->
-	<script src="{{ asset('frontend/vendor/perfect-scrollbar/perfect-scrollbar.min.js') }}"></script>
-	<script>
-		$('.js-pscroll').each(function(){
-			$(this).css('position','relative');
-			$(this).css('overflow','hidden');
-			var ps = new PerfectScrollbar(this, {
-				wheelSpeed: 1,
-				scrollingThreshold: 1000,
-				wheelPropagation: false,
-			});
+	
+@endsection
 
-			$(window).on('resize', function(){
-				ps.update();
-			})
-		});
-	</script>
-<!--===============================================================================================-->
+
+@push('scripts')
+
+    <!--===============================================================================================-->
 	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAKFWBqlKAGCeS1rMVoaNlwyayu0e0YRes"></script>
 	<script src="{{ asset('frontend/js/map-custom.js') }}"></script>
-<!--===============================================================================================-->
-	<script src="{{ asset('frontend/js/main.js') }}"></script>
 
 	<script src="{{ asset('frontend/js/script.js') }}"></script>
-    
-    @include('frontend.global_js')
     <!-- Script pour le formulaire avec Toast -->
     <script>
         // Fonction pour afficher un toast
@@ -558,5 +518,6 @@
         });
     </script>
 
-</body>
-</html>
+
+@endpush
+@stack('scripts')

@@ -1,8 +1,6 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
+@extends('client.layout')
+@push('links')
     <title>Validation Commande - ABS-TECHNOLOGIE</title>
-    @include('client.body.head')
     <style>
         /* Variables de couleur */
         :root {
@@ -1001,11 +999,12 @@
         .ck-card:nth-child(3) { animation-delay: .2s; }
     </style>
 
-</head>
-<body class="animsition">
+@endpush
 
-@include('client.body.header')
-@include('frontend.modal')
+    
+
+@section('content')
+
 
 
 <div class="co-hero">
@@ -1324,7 +1323,7 @@
                         <div class="ck-item-img-wrap">
                             <img class="ck-item-img"
                                  src="{{ $item->product->images->isNotEmpty() ? asset('storage/'.$item->product->images->first()->image_path) : asset('frontend/images/no-image.jpg') }}"
-                                 alt="{{ $item->product->name }}">
+                                 alt="{{ $item->product->name }}" loading="lazy">
                             <div class="ck-item-qty">{{ $item->quantity }}</div>
                         </div>
                         <div class="ck-item-body">
@@ -1384,25 +1383,11 @@
 </div>
 
 
-@include('client.body.footer')
+@endsection
 
-<!-- Scripts -->
-<script src="{{ asset('frontend/vendor/jquery/jquery-3.2.1.min.js') }}"></script>
-<script src="{{ asset('frontend/vendor/animsition/js/animsition.min.js') }}"></script>
-<script src="{{ asset('frontend/vendor/bootstrap/js/popper.js') }}"></script>
-<script src="{{ asset('frontend/vendor/bootstrap/js/bootstrap.min.js') }}"></script>
-<script src="{{ asset('frontend/vendor/select2/select2.min.js') }}"></script>
-<script src="{{ asset('frontend/vendor/daterangepicker/moment.min.js') }}"></script>
-<script src="{{ asset('frontend/vendor/daterangepicker/daterangepicker.js') }}"></script>
-<script src="{{ asset('frontend/vendor/slick/slick.min.js') }}"></script>
-<script src="{{ asset('frontend/js/slick-custom.js') }}"></script>
-<script src="{{ asset('frontend/vendor/parallax100/parallax100.js') }}"></script>
-<script src="{{ asset('frontend/vendor/MagnificPopup/jquery.magnific-popup.min.js') }}"></script>
-<script src="{{ asset('frontend/vendor/isotope/isotope.pkgd.min.js') }}"></script>
-<script src="{{ asset('frontend/vendor/sweetalert/sweetalert.min.js') }}"></script>
-<script src="{{ asset('frontend/vendor/perfect-scrollbar/perfect-scrollbar.min.js') }}"></script>
-<script src="{{ asset('frontend/js/main.js') }}"></script>
-@include('frontend.global_js')
+
+@push('scripts')
+
 
 <script>
 $(document).ready(function () {
@@ -1493,5 +1478,5 @@ $(document).ready(function () {
     });
 });
 </script>
-</body>
-</html>
+@endpush
+@stack('scripts')

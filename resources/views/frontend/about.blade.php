@@ -1,8 +1,6 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
+@extends('client.layout')
+@push('links')
 <title>A propos ABS-TECHNOLOGIE</title>
-@include('client.body.head')
     <!-- ========================================
          FONTS & STYLES
          ======================================== -->
@@ -23,16 +21,11 @@
 
    
 
-</head>
+@endpush
 
-<body class="animsition">
-    <!-- Navigation -->
-    @include('client.body.header')
+    
 
-    <!-- Hero Section -->
-
-	@include('frontend.modal')
-	<!-- Title page -->
+@section('content')
 	
     <div class="ab-hero">
         <div class="ab-hero__inner">
@@ -47,9 +40,9 @@
                     </h1>
 
                     <p class="ab-hero__desc">
-                        Distributeur agréé Samsung et acteur majeur de la tech au Bénin.
-                        Smartphones, électroménager, solutions entreprises —
-                        nous accompagnons particuliers et professionnels depuis plus de deux décennies.
+                        Distributeur agréé Samsung et Acteur Majeur de la Tech au Bénin.
+                        Smartphones, Electroménager, Solutions Entreprises —
+                        nous accompagnons Particuliers et Professionnels depuis plus de Deux Décennies.
                     </p>
 
                     {{-- Badges partenaires --}}
@@ -122,16 +115,16 @@
                     <span class="section-label">Notre Histoire</span>
                     <h2 class="section-title">ABS Technologie Group</h2>
                     <p class="about-text">
-                        <strong>ABS TECHNOLOGIE Group</strong> s'est imposée comme un acteur majeur 
-                        de la distribution technologique et électroménagère au Bénin. En tant que distributeur agréé Samsung 
-                        et partenaire Meilleures Services Orange, nous offrons à nos clients un accès privilégié aux meilleures 
-                        innovations technologiques mondiales.
+                        <strong>ABS TECHNOLOGIE Group</strong> s'est imposée comme un Acteur Majeur 
+                        de la Distribution Technologique et Electroménagère au Bénin. En tant que Distributeur Agréé Samsung 
+                        , nous offrons à nos clients un accès Privilégié aux Meilleures 
+                        Innovations Technologiques mondiales.
                     </p>
                     <p class="about-text">
-                        Notre engagement envers l'excellence se traduit par un service client irréprochable, 
-                        des produits authentiques garantis et une expertise technique reconnue. Nous intervenons 
-                        aussi bien auprès des ménages que des entreprises, en proposant la vente, l’installation 
-                        et la maintenance d’appareils électroménagers et électroniques, tout en accompagnant nos 
+                        Notre engagement envers l'Excellence se traduit par un Service Client Irréprochable, 
+                        des Produits Authentiques Garantis et une Expertise Technique reconnue. Nous intervenons 
+                        aussi bien auprès des Ménages que des Entreprises, en proposant la Vente, l’Installation 
+                        et la Maintenance d’Appareils Electroménagers et Electroniques, tout en Accompagnant nos 
                         clients dans leur transformation digitale.
                     </p>
 
@@ -140,21 +133,21 @@
                             <div class="value-icon">✓</div>
                             <div class="value-content">
                                 <h4>Authenticité Garantie</h4>
-                                <p>Produits originaux avec garantie constructeur</p>
+                                <p>Produits Originaux avec Garantie Constructeur</p>
                             </div>
                         </div>
                         <div class="value-item">
                             <div class="value-icon">✓</div>
                             <div class="value-content">
                                 <h4>Expertise Technique</h4>
-                                <p>Équipe certifiée et formée en continu</p>
+                                <p>Équipe Certifiée et Formée en continu</p>
                             </div>
                         </div>
                         <div class="value-item">
                             <div class="value-icon">✓</div>
                             <div class="value-content">
                                 <h4>Service Excellence</h4>
-                                <p>Accompagnement personnalisé à chaque étape</p>
+                                <p>Accompagnement Personnalisé à chaque étape</p>
                             </div>
                         </div>
                     </div>
@@ -195,7 +188,7 @@
                 <span class="section-label">Ce que nous offrons</span>
                 <h2 class="section-title">Notre Expertise, Vos Solutions</h2>
                 <p class="section-description">
-                    Une gamme complète de services pour les particuliers et les professionnels, couvrant tous vos besoins technologiques.
+                    Une gamme Complète de Services pour les Particuliers et les Professionnels, couvrant tous vos Besoins Technologiques.
                 </p>
             </div>
             <div class="services-grid">
@@ -207,7 +200,7 @@
                     </div>
                     <h3 class="service-title">Distribution & Commerce</h3>
                     <p class="service-description">
-                        Import-export, vente en gros, demi-gros et détail de produits électroniques, électroménagers et biens divers. Notre réseau logistique assure une disponibilité optimale.
+                        Import-export, Vente en gros, demi-gros et détail de produits Electroniques, Electroménagers et biens divers. Notre réseau logistique assure une disponibilité optimale.
                     </p>
                     <div class="service-features">
                         <span class="feature-tag">Import/Export</span>
@@ -241,7 +234,7 @@
                     </div>
                     <h3 class="service-title">Solutions Entreprises & Assistance</h3>
                     <p class="service-description">
-                        Que vous soyez particulier, entreprise, administration ou institution, nous vous accompagnons avec des solutions sur mesure : installation et maintenance de réseaux, équipements domestiques et professionnels, audit technique et support personnalisé.
+                        Que vous soyez Particulier, Entreprise, Administration ou Institution, nous vous accompagnons avec des oSlutions sur Mesure : Installation et Maintenance de Réseaux, Equipements Domestiques et Professionnels, Audit Technique et Support Personnalisé.
                     </p>
                     <div class="service-features">
                         <span class="feature-tag">Installation réseau</span>
@@ -260,7 +253,7 @@
                     </div>
                     <h3 class="service-title">Service Après-Vente</h3>
                     <p class="service-description">
-                        Centre de réparation avec des techniciens certifiés. Installation de systèmes de vidéo-surveillance, contrôle qualité, magasinage et maintenance de tous vos équipements avec des pièces d'origine.
+                        Centre de réparation avec des Techniciens Certifiés. Installation de systèmes de vidéo-surveillance, contrôle qualité, magasinage et maintenance de tous vos équipements avec des pièces d'origine.
                     </p>
                     <div class="service-features">
                         <span class="feature-tag">Réparations</span>
@@ -285,10 +278,10 @@
                 <div class="partner-card samsung-card" data-aos="zoom-in" data-delay="0">
                     <div class="partner-badge">Distributeur Agréé</div>
                     <div class="partner-logo">
-                        <div class="samsung-logo">SAMSUNG</div>
+                        <div class="samsung-logo">ABS SAMSUNG</div>
                     </div>
                     <h3>Samsung Electronics</h3>
-                    <p>Partenaire officiel pour la distribution des produits Samsung au Bénin. Accès exclusif aux dernières innovations technologiques.</p>
+                    <p>Partenaire Officiel pour la Distribution des Produits Samsung au Bénin. Accès Exclusif aux Dernières Innovations Technologiques.</p>
                     <div class="partner-stats">
                         <div class="stat">
                             <div class="stat-value">100%</div>
@@ -332,7 +325,7 @@
                 <span class="section-label">Notre Showroom</span>
                 <h2 class="section-title">Galerie Photos</h2>
                 <p class="section-description">
-                    Découvrez nos espaces modernes et nos produits Samsung & Orange
+                    Découvrez nos espaces modernes et nos Produits Samsung
                 </p>
             </div>
             
@@ -359,7 +352,7 @@
                 <div class="gallery-item large" data-aos="fade-up" data-delay="200">
                     <div class="gallery-image">
                         <img 
-                            src="{{ asset('frontend/images/44.jpeg') }}" 
+                            src="{{ asset('frontend/images/4.jpeg') }}" 
                             alt="Intérieur du showroom ABS Technologie"
                             loading="lazy"
                             class="gallery-img"
@@ -438,8 +431,8 @@
                         >
                         <div class="gallery-overlay">
                             <div class="gallery-info">
-                                <h4>Samsung & Orange</h4>
-                                <p>Les meilleurs services à votre disposition </p>
+                                <h4>Samsung</h4>
+                                <p>Les Meilleurs Services à votre disposition </p>
                             </div>
                         </div>
                     </div>
@@ -458,7 +451,7 @@
                         <div class="gallery-overlay">
                             <div class="gallery-info">
                                 <h4>Des nouveautés</h4>
-                                <p>Passez à notre showroom pour découvrir les nouvelles technologies à votre disposition</p>
+                                <p>Passez à notre Showroom pour découvrir les Nouvelles Technologies à votre disposition</p>
                             </div>
                         </div>
                     </div>
@@ -467,58 +460,24 @@
 
             
             <div class="gallery-note">
-                <p><i class="fas fa-info-circle"></i> Visitez notre showroom au CAMP-GUEZO, face à l'Hôpital des Armées (HIA)</p>
+                <p><i class="fas fa-info-circle"></i> Visitez notre Showroom au CAMP-GUEZO, face à l'Hôpital des Armées (HIA)</p>
             </div>
         </div>
     </section>
 
-    @include('client.body.footer')
-<!--===============================================================================================-->	
-	<script src="{{ asset('frontend/vendor/jquery/jquery-3.2.1.min.js') }}"></script>
-<!--===============================================================================================-->
-	<script src="{{ asset('frontend/vendor/animsition/js/animsition.min.js') }}"></script>
-<!--===============================================================================================-->
-	<script src="{{ asset('frontend/vendor/bootstrap/js/popper.js') }}"></script>
-	<script src="{{ asset('frontend/vendor/bootstrap/js/bootstrap.min.js') }}"></script>
-<!--===============================================================================================-->
-	<script src="{{ asset('frontend/vendor/select2/select2.min.js') }}"></script>
-	<script>
-		$(".js-select2").each(function(){
-			$(this).select2({
-				minimumResultsForSearch: 20,
-				dropdownParent: $(this).next('.dropDownSelect2')
-			});
-		})
-	</script>
-<!--===============================================================================================-->
-	<script src="{{ asset('frontend/vendor/MagnificPopup/jquery.magnific-popup.min.js') }}"></script>
-<!--===============================================================================================-->
-	<script src="{{ asset('frontend/vendor/perfect-scrollbar/perfect-scrollbar.min.js') }}"></script>
-	<script>
-		$('.js-pscroll').each(function(){
-			$(this).css('position','relative');
-			$(this).css('overflow','hidden');
-			var ps = new PerfectScrollbar(this, {
-				wheelSpeed: 1,
-				scrollingThreshold: 1000,
-				wheelPropagation: false,
-			});
 
-			$(window).on('resize', function(){
-				ps.update();
-			})
-		});
-	</script>
+@endsection
+
+
+@push('scripts')
+
 <!--===============================================================================================-->
 	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAKFWBqlKAGCeS1rMVoaNlwyayu0e0YRes"></script>
-	<script src="{{ asset('frontend/js/map-custom.js') }}"></script>
+	<script src="{{ asset('frontend/js/map-custom.js') }}"defer></script>
 <!--===============================================================================================-->
-	<script src="{{ asset('frontend/js/main.js') }}"></script>
 
-	<script src="{{ asset('frontend/js/script.js') }}"></script>
-	<script src="{{ asset('frontend/js/script.js') }}"></script>
+	<script src="{{ asset('frontend/js/script.js') }}"defer></script>
     
-	@include('frontend.global_js')
     
     <script>
         // Optimisation du chargement des images de la galerie
@@ -667,5 +626,5 @@
             }
         });
     </script>
-</body>
-</html>
+@endpush
+@stack('scripts')

@@ -397,7 +397,7 @@
                 <span class="abs-footer__logo-badge">Group</span>
             </a>
             <p class="abs-footer__tagline">
-                Votre partenaire tech au Bénin — smartphones, informatique &amp; électroménager certifiés, livrés à Cotonou.
+                Votre partenaire tech au Bénin — smartphones, informatique &amp; électroménager certifiés, livrés dans tout le Bénin.
             </p>
             <div class="abs-footer__socials">
                 <a href="https://facebook.com/abstechnologiegroup" target="_blank" 
@@ -495,7 +495,7 @@
             Tous droits réservés.
         </p>
         <p class="abs-footer__made">
-            Réalisé par <a href="https://abstechnologie.com" target="_blank">ABS Technologie Group</a>
+            Réalisé par <a href="https://abstechnologie.site" target="_blank">ABS Technologie Group</a>
         </p>
     </div>
 

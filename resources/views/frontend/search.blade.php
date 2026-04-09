@@ -1,8 +1,7 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
+@extends('client.layout')
+@push('links')
     <title>Résultats recherche — ABS-TECHNOLOGIE</title>
-    @include('client.body.head')
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
@@ -420,6 +419,7 @@
             position: relative;
             display: flex;
             flex-direction: column;
+            cursor: pointer;
         }
 
         .srp-card:hover {
@@ -749,10 +749,9 @@
             display: none !important;
         }
     </style>
-</head>
+@endpush
 
-<body class="animsition">
-    @include('client.body.header')
+@section('content')
 
     {{-- ── Hero ── --}}
     <div class="srp-hero ">
@@ -782,7 +781,7 @@
                 <button type="submit">Rechercher</button>
             </form> --}}
             
-					@include('frontend.hero-search')
+					@include('frontend.partials.hero-search')
         </div>
     </div>
 
@@ -941,52 +940,55 @@
                 @forelse($products as $product)
                 <div class="srp-card">
                     {{-- Image --}}
-                    <div class="srp-card-img">
-                        @if($product->images->isNotEmpty())
-                            <img src="{{ asset('storage/' . $product->images->first()->image_path) }}"
-                                 alt="{{ $product->name }}" loading="lazy">
-                        @else
-                            <img src="{{ asset('frontend/images/no-image.jpg') }}"
-                                 alt="{{ $product->name }}" loading="lazy">
-                        @endif
+                    
+					<a href="{{ route('client.detail.product', $product->id) }}" class="ps-card-img-link">
+                        <div class="srp-card-img">
+                            @if($product->images->isNotEmpty())
+                                <img src="{{ asset('storage/' . $product->images->first()->image_path) }}"
+                                    alt="{{ $product->name }}" loading="lazy">
+                            @else
+                                <img src="{{ asset('frontend/images/no-image.jpg') }}"
+                                    alt="{{ $product->name }}" loading="lazy">
+                            @endif
 
-                        {{-- Badge --}}
-                        @if($product->compare_price && $product->compare_price > $product->price)
-                            @php $disc = round((1 - $product->price / $product->compare_price) * 100); @endphp
-                            <span class="srp-card-badge srp-badge-promo">−{{ $disc }}%</span>
-                        @elseif($product->created_at->diffInDays(now()) <= 30)
-                            <span class="srp-card-badge srp-badge-new">Nouveau</span>
-                        @endif
+                            {{-- Badge --}}
+                            @if($product->compare_price && $product->compare_price > $product->price)
+                                @php $disc = round((1 - $product->price / $product->compare_price) * 100); @endphp
+                                <span class="srp-card-badge srp-badge-promo">−{{ $disc }}%</span>
+                            @elseif($product->created_at->diffInDays(now()) <= 30)
+                                <span class="srp-card-badge srp-badge-new">Nouveau</span>
+                            @endif
 
-                        {{-- Wishlist --}}
-                        <button class="srp-card-wish js-addwish-b2"
-                                data-product-id="{{ $product->id }}"
-                                title="Ajouter aux favoris">
-                            <svg viewBox="0 0 24 24" width="15" height="15" fill="none"
-                                 stroke="#e65540" stroke-width="2">
-                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-                            </svg>
-                        </button>
-
-                        {{-- Overlay --}}
-                        <div class="srp-card-overlay">
-                            <a href="#"
-                               class="srp-card-view js-show-modal1"
-                               data-product-id="{{ $product->id }}"
-                               data-product-name="{{ $product->name }}"
-                               data-product-price="{{ $product->price }}"
-                               data-product-description="{{ $product->description }}"
-                               data-product-images="{{ json_encode($product->images) }}"
-                               data-product-colors="{{ json_encode($product->colors) }}"
-                               data-product-specs="{{ json_encode($product->specifications ?? []) }}">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                                    <circle cx="12" cy="12" r="3"/>
+                            {{-- Wishlist --}}
+                            <button class="srp-card-wish js-addwish-b2"
+                                    data-product-id="{{ $product->id }}"
+                                    title="Ajouter aux favoris">
+                                <svg viewBox="0 0 24 24" width="15" height="15" fill="none"
+                                    stroke="#e65540" stroke-width="2">
+                                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
                                 </svg>
-                                Aperçu rapide
-                            </a>
+                            </button>
+
+                            {{-- Overlay --}}
+                            <div class="srp-card-overlay">
+                                <a href="#"
+                                class="srp-card-view js-show-modal1"
+                                data-product-id="{{ $product->id }}"
+                                data-product-name="{{ $product->name }}"
+                                data-product-price="{{ $product->price }}"
+                                data-product-description="{{ $product->description }}"
+                                data-product-images="{{ json_encode($product->images) }}"
+                                data-product-colors="{{ json_encode($product->colors) }}"
+                                data-product-specs="{{ json_encode($product->specifications ?? []) }}">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                        <circle cx="12" cy="12" r="3"/>
+                                    </svg>
+                                    Aperçu rapide
+                                </a>
+                            </div>
                         </div>
-                    </div>
+                    </a>
 
                     {{-- Body --}}
                     <div class="srp-card-body">
@@ -1084,37 +1086,24 @@
         </main>
     </div>
 
-    @include('frontend.modal')
-    @include('client.body.footer')
-    @include('frontend.productModal')
+@endsection
 
-    <script src="{{ asset('frontend/vendor/jquery/jquery-3.2.1.min.js') }}"></script>
-    <script src="{{ asset('frontend/vendor/animsition/js/animsition.min.js') }}"></script>
-    <script src="{{ asset('frontend/vendor/bootstrap/js/popper.js') }}"></script>
-    <script src="{{ asset('frontend/vendor/bootstrap/js/bootstrap.min.js') }}"></script>
-    <script src="{{ asset('frontend/vendor/select2/select2.min.js') }}"></script>
+
+@push('scripts')
+
+{{-- 
     <script>
         $(".js-select2").each(function(){
             $(this).select2({ minimumResultsForSearch: 20, dropdownParent: $(this).next('.dropDownSelect2') });
         });
     </script>
-    <script src="{{ asset('frontend/vendor/daterangepicker/moment.min.js') }}"></script>
-    <script src="{{ asset('frontend/vendor/daterangepicker/daterangepicker.js') }}"></script>
-    <script src="{{ asset('frontend/vendor/slick/slick.min.js') }}"></script>
-    <script src="{{ asset('frontend/js/slick-custom.js') }}"></script>
-    <script src="{{ asset('frontend/vendor/parallax100/parallax100.js') }}"></script>
-    <script src="{{ asset('frontend/vendor/MagnificPopup/jquery.magnific-popup.min.js') }}"></script>
-    <script src="{{ asset('frontend/vendor/isotope/isotope.pkgd.min.js') }}"></script>
-    <script src="{{ asset('frontend/vendor/sweetalert/sweetalert.min.js') }}"></script>
-    <script src="{{ asset('frontend/vendor/perfect-scrollbar/perfect-scrollbar.min.js') }}"></script>
     <script>
         $('.js-pscroll').each(function(){
             $(this).css({'position':'relative','overflow':'hidden'});
             var ps = new PerfectScrollbar(this, { wheelSpeed:1, scrollingThreshold:1000, wheelPropagation:false });
             $(window).on('resize', function(){ ps.update(); });
         });
-    </script>
-    <script src="{{ asset('frontend/js/main.js') }}"></script>
-    @include('frontend.global_js')
-</body>
-</html>
+    </script> --}}
+
+@endpush
+@stack('scripts')
