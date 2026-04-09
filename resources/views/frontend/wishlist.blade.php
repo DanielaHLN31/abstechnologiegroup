@@ -1,8 +1,8 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
+@extends('client.layout')
+@push('links')
     <title>Mes favoris | ABS-TECHNOLOGIE</title>
-    @include('client.body.head')
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
         /* ===== STYLES MODERNES POUR LA WISHLIST ===== */
@@ -367,11 +367,9 @@
             }
         }
     </style>
-</head>
+@endpush
 
-<body class="animsition">
-    @include('client.body.header')
-    @include('frontend.modal')
+@section('content')
 
     <!-- Hero Section Wishlist -->
     <div class="wishlist-hero mt-5">
@@ -425,30 +423,35 @@
                 <div class="col-sm-6 col-md-4 col-lg-3 p-b-35 wishlist-card" data-product-id="{{ $product->id }}" style="animation-delay: {{ $index * 0.05 }}s">
                     <div class="modern-product-card">
                         {{-- Image --}}
-                        <div class="product-image-wrapper">
-                            @if($product->images->isNotEmpty())
-                                <img src="{{ asset('storage/' . $product->images->first()->image_path) }}" alt="{{ $product->name }}">
-                            @else
-                                <img src="{{ asset('frontend/images/no-image.jpg') }}" alt="No Image">
-                            @endif
-                            
-                            {{-- Badge promo --}}
-                            @if($hasDiscount)
-                                <span class="product-badge sale">-{{ $discountPercent }}%</span>
-                            @endif
-                            
-                            {{-- Bouton retirer --}}
-                            <button type="button" class="btn-remove-wishlist" data-product-id="{{ $product->id }}" title="Retirer des favoris">
-                                <i class="zmdi zmdi-favorite"></i>
-                            </button>
-                        </div>
-
+                        
+					    <a href="{{ route('client.detail.product', $product->id) }}" class="ps-card-name-link">
+                            <div class="product-image-wrapper">
+                                @if($product->images->isNotEmpty())
+                                    <img src="{{ asset('storage/' . $product->images->first()->image_path) }}" alt="{{ $product->name }}" loading="lazy">
+                                @else
+                                    <img src="{{ asset('frontend/images/no-image.jpg') }}" alt="No Image">
+                                @endif
+                                
+                                {{-- Badge promo --}}
+                                @if($hasDiscount)
+                                    <span class="product-badge sale">-{{ $discountPercent }}%</span>
+                                @endif
+                                
+                                {{-- Bouton retirer --}}
+                                <button type="button" class="btn-remove-wishlist" data-product-id="{{ $product->id }}" title="Retirer des favoris">
+                                    <i class="zmdi zmdi-favorite"></i>
+                                </button>
+                            </div>
+                        </a>
                         {{-- Infos produit --}}
                         <div class="product-info">
                             @if($product->category)
                                 <span class="product-category">{{ $product->category->name }}</span>
                             @endif
-                            <h3 class="product-name">{{ $product->name }}</h3>
+                            
+					        <a href="{{ route('client.detail.product', $product->id) }}" class="ps-card-name-link">
+                                <h3 class="product-name">{{ $product->name }}</h3>
+                            </a>
                             
                             <div class="product-price">
                                 <span class="current-price">{{ number_format($product->price, 0, ',', ' ') }} FCFA</span>
@@ -506,25 +509,11 @@
             @endif
         @endif
     </div>
+@endsection
 
-    @include('client.body.footer')
-    @include('frontend.productModal')
 
-    <!-- Scripts -->
-    <script src="{{ asset('frontend/vendor/jquery/jquery-3.2.1.min.js') }}"></script>
-    <script src="{{ asset('frontend/vendor/animsition/js/animsition.min.js') }}"></script>
-    <script src="{{ asset('frontend/vendor/bootstrap/js/popper.js') }}"></script>
-    <script src="{{ asset('frontend/vendor/bootstrap/js/bootstrap.min.js') }}"></script>
-    <script src="{{ asset('frontend/vendor/select2/select2.min.js') }}"></script>
-    <script src="{{ asset('frontend/vendor/slick/slick.min.js') }}"></script>
-    <script src="{{ asset('frontend/js/slick-custom.js') }}"></script>
-    <script src="{{ asset('frontend/vendor/parallax100/parallax100.js') }}"></script>
-    <script src="{{ asset('frontend/vendor/MagnificPopup/jquery.magnific-popup.min.js') }}"></script>
-    <script src="{{ asset('frontend/vendor/isotope/isotope.pkgd.min.js') }}"></script>
-    <script src="{{ asset('frontend/vendor/sweetalert/sweetalert.min.js') }}"></script>
-    <script src="{{ asset('frontend/vendor/perfect-scrollbar/perfect-scrollbar.min.js') }}"></script>
-    <script src="{{ asset('frontend/js/main.js') }}"></script>
-    @include('frontend.global_js')
+@push('scripts')
+
 
     <script>
     $(document).ready(function () {
@@ -706,5 +695,5 @@
         }
     });
     </script>
-</body>
-</html>
+@endpush
+@stack('scripts')

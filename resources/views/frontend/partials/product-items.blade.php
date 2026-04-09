@@ -6,51 +6,53 @@
     
     
     {{-- Zone image --}}
-    <div class="ps-card-img">
+	<a href="{{ route('client.detail.product', $product->id) }}" class="ps-card-img-link">
+        <div class="ps-card-img">
 
-        @if($product->images->isNotEmpty())
-            <img src="{{ asset('storage/' . $product->images->first()->image_path) }}"
-                 alt="{{ $product->name }}" loading="lazy">
-        @else
-            <img src="{{ asset('frontend/images/no-image.jpg') }}"
-                 alt="{{ $product->name }}" loading="lazy">
-        @endif
+            @if($product->images->isNotEmpty())
+                <img src="{{ asset('storage/' . $product->images->first()->image_path) }}"
+                    alt="{{ $product->name }}" loading="lazy">
+            @else
+                <img src="{{ asset('frontend/images/no-image.jpg') }}"
+                    alt="{{ $product->name }}" loading="lazy">
+            @endif
 
-        {{-- Badge (Promo > Nouveau > Top Vente) --}}
-        @if($product->compare_price && $product->compare_price > $product->price)
-            @php $discount = round((1 - $product->price / $product->compare_price) * 100); @endphp
-            <span class="ps-badge badge-promo">-{{ $discount }}%</span>
-        @elseif($product->created_at->diffInDays(now()) <= 30)
-            <span class="ps-badge badge-new">Nouveau</span>
-        @elseif($product->is_featured ?? false)
-            <span class="ps-badge badge-top">Top Vente</span>
-        @endif
+            {{-- Badge (Promo > Nouveau > Top Vente) --}}
+            @if($product->compare_price && $product->compare_price > $product->price)
+                @php $discount = round((1 - $product->price / $product->compare_price) * 100); @endphp
+                <span class="ps-badge badge-promo">-{{ $discount }}%</span>
+            @elseif($product->created_at->diffInDays(now()) <= 30)
+                <span class="ps-badge badge-new">Nouveau</span>
+            @elseif($product->is_featured ?? false)
+                <span class="ps-badge badge-top">Top Vente</span>
+            @endif
 
-        {{-- Bouton Favori --}}
-        <button class="ps-wish js-addwish-b2"
+            {{-- Bouton Favori --}}
+            <button class="ps-wish js-addwish-b2"
+                    data-product-id="{{ $product->id }}"
+                    title="Ajouter aux favoris">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none"
+                    stroke="#CC1B1B" stroke-width="2">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67
+                            l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06
+                            L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                </svg>
+            </button>
+
+            {{-- Aperçu rapide --}}
+            <div class="ps-quickview js-show-modal1"
                 data-product-id="{{ $product->id }}"
-                title="Ajouter aux favoris">
-            <svg viewBox="0 0 24 24" width="16" height="16" fill="none"
-                 stroke="#CC1B1B" stroke-width="2">
-                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67
-                         l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06
-                         L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-            </svg>
-        </button>
+                data-product-name="{{ $product->name }}"
+                data-product-price="{{ $product->price }}"
+                data-product-description="{{ $product->description }}"
+                data-product-images="{{ json_encode($product->images) }}"
+                data-product-colors="{{ json_encode($product->colors) }}"
+                data-product-specs="{{ json_encode($product->specifications) }}">
+                Aperçu rapide
+            </div>
 
-        {{-- Aperçu rapide --}}
-        <div class="ps-quickview js-show-modal1"
-             data-product-id="{{ $product->id }}"
-             data-product-name="{{ $product->name }}"
-             data-product-price="{{ $product->price }}"
-             data-product-description="{{ $product->description }}"
-             data-product-images="{{ json_encode($product->images) }}"
-             data-product-colors="{{ json_encode($product->colors) }}"
-             data-product-specs="{{ json_encode($product->specifications) }}">
-            Aperçu rapide
-        </div>
-
-    </div>{{-- /.ps-card-img --}}
+        </div>{{-- /.ps-card-img --}}
+    </a>
 
     {{-- Corps --}}
     <div class="ps-card-body">
@@ -59,9 +61,8 @@
             {{ $product->category->name ?? 'Produit' }}
         </span>
 
-        <a href="{{ route('client.product.detail', $product->id) }}"
-           class="ps-card-name">
-            {{ $product->name }}
+		<a href="{{ route('client.detail.product', $product->id) }}" class="ps-card-name-link">
+            <div class="ps-card-name">{{ $product->name }}</div>
         </a>
 
         {{-- Pastilles couleurs --}}

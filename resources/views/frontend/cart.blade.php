@@ -1,8 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+@extends('client.layout')
+@push('links')
 	<title>Panier ABS-TECHNOLOGIE</title>
-	@include('client.body.head')
 	
 	<style>
 		/* Styles personnalisés pour la page panier */
@@ -375,12 +373,12 @@
 			}
 		}
 	</style>
-</head>
+@endpush
 
-<body class="animsition">
+    
+
+@section('content')
 	<!-- Header -->
-	@include('client.body.header')
-	@include('frontend.modal')
 
 	<div class="cart-container">
 		<div class="cart-header">
@@ -423,10 +421,10 @@
 									<div style="display: flex; align-items: center; gap: 15px;">
 										<div class="product-image">
 											@if($item->product->images->isNotEmpty())
-												<img src="{{ asset('storage/' . $item->product->images->first()->image_path) }}"
+												<img src="{{ asset('storage/' . $item->product->images->first()->image_path) }}" loading="lazy"
 													alt="{{ $item->product->name }}">
 											@else
-												<img src="{{ asset('frontend/images/no-image.jpg') }}" alt="no image">
+												<img src="{{ asset('frontend/images/no-image.jpg') }}" alt="no image" loading="lazy">
 											@endif
 										</div>
 										<div>
@@ -541,25 +539,11 @@
 		@endif
 	</div>
 
-	@include('client.body.footer')
+@endsection
 
-	<!-- Scripts -->
-	<script src="{{ asset('frontend/vendor/jquery/jquery-3.2.1.min.js') }}"></script>
-	<script src="{{ asset('frontend/vendor/animsition/js/animsition.min.js') }}"></script>
-	<script src="{{ asset('frontend/vendor/bootstrap/js/popper.js') }}"></script>
-	<script src="{{ asset('frontend/vendor/bootstrap/js/bootstrap.min.js') }}"></script>
-	<script src="{{ asset('frontend/vendor/select2/select2.min.js') }}"></script>
-	<script src="{{ asset('frontend/vendor/daterangepicker/moment.min.js') }}"></script>
-	<script src="{{ asset('frontend/vendor/daterangepicker/daterangepicker.js') }}"></script>
-	<script src="{{ asset('frontend/vendor/slick/slick.min.js') }}"></script>
-	<script src="{{ asset('frontend/js/slick-custom.js') }}"></script>
-	<script src="{{ asset('frontend/vendor/parallax100/parallax100.js') }}"></script>
-	<script src="{{ asset('frontend/vendor/MagnificPopup/jquery.magnific-popup.min.js') }}"></script>
-	<script src="{{ asset('frontend/vendor/isotope/isotope.pkgd.min.js') }}"></script>
-	<script src="{{ asset('frontend/vendor/sweetalert/sweetalert.min.js') }}"></script>
-	<script src="{{ asset('frontend/vendor/perfect-scrollbar/perfect-scrollbar.min.js') }}"></script>
-	<script src="{{ asset('frontend/js/main.js') }}"></script>
-	@include('frontend.global_js')
+
+@push('scripts')
+
 
 	<script>
 	$(document).ready(function () {
@@ -682,5 +666,5 @@
 		}
 	});
 	</script>
-</body>
-</html>
+@endpush
+@stack('scripts')

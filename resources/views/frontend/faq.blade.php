@@ -1,6 +1,5 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
+@extends('client.layout')
+@push('links')
     <title>FAQ - ABS TECHNOLOGIE</title>
     @include('client.body.head')
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -517,11 +516,10 @@
             }
         }
     </style>
-</head>
-<body class="animsition">
-    
-    @include('client.body.header')
-    @include('frontend.modal')
+
+@endpush
+
+@section('content')
 
     <!-- Hero Section -->
     
@@ -843,17 +841,13 @@
             </a>
         </div>
     </div>
-
-    @include('client.body.footer')
-
+    
     <div id="toast-container" style="position: fixed; top: 20px; right: 20px; z-index: 99999;"></div>
 
-    <script src="{{ asset('frontend/vendor/jquery/jquery-3.2.1.min.js') }}"></script>
-    <script src="{{ asset('frontend/vendor/animsition/js/animsition.min.js') }}"></script>
-    <script src="{{ asset('frontend/vendor/bootstrap/js/popper.js') }}"></script>
-    <script src="{{ asset('frontend/vendor/bootstrap/js/bootstrap.min.js') }}"></script>
-    
-    @include('frontend.global_js')
+@endsection
+
+
+@push('scripts')
     
     <script>
     $(document).ready(function() {
@@ -953,37 +947,34 @@
     });
     </script>
     
-    <script src="{{ asset('frontend/vendor/select2/select2.min.js') }}"></script>
-    <script src="{{ asset('frontend/vendor/MagnificPopup/jquery.magnific-popup.min.js') }}"></script>
-    <script src="{{ asset('frontend/vendor/perfect-scrollbar/perfect-scrollbar.min.js') }}"></script>
-    <script src="{{ asset('frontend/js/main.js') }}"></script>
     
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    document.querySelectorAll('.fq-cat-btn').forEach(function (btn) {
-        btn.addEventListener('click', function () {
-            document.querySelectorAll('.fq-cat-btn').forEach(function (b) {
-                b.classList.remove('active');
-            });
-            this.classList.add('active');
-
-            var category = this.dataset.category;
-
-            /* Synchronise avec les anciens boutons .faq-cat-btn si présents */
-            var oldBtn = document.querySelector('.faq-cat-btn[data-category="' + category + '"]');
-            if (oldBtn) oldBtn.click();
-
-            /* Logique inline si les anciens boutons sont absents */
-            if (!oldBtn) {
-                document.querySelectorAll('.faq-section').forEach(function (s) {
-                    s.style.display = (category === 'all' || s.dataset.category === category) ? '' : 'none';
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.fq-cat-btn').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                document.querySelectorAll('.fq-cat-btn').forEach(function (b) {
+                    b.classList.remove('active');
                 });
-                var noRes = document.querySelector('.no-results');
-                if (noRes) noRes.style.display = 'none';
-            }
+                this.classList.add('active');
+
+                var category = this.dataset.category;
+
+                /* Synchronise avec les anciens boutons .faq-cat-btn si présents */
+                var oldBtn = document.querySelector('.faq-cat-btn[data-category="' + category + '"]');
+                if (oldBtn) oldBtn.click();
+
+                /* Logique inline si les anciens boutons sont absents */
+                if (!oldBtn) {
+                    document.querySelectorAll('.faq-section').forEach(function (s) {
+                        s.style.display = (category === 'all' || s.dataset.category === category) ? '' : 'none';
+                    });
+                    var noRes = document.querySelector('.no-results');
+                    if (noRes) noRes.style.display = 'none';
+                }
+            });
         });
     });
-});
-</script>
-</body>
-</html>
+    </script>
+
+@endpush
+@stack('scripts')

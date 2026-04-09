@@ -4,14 +4,13 @@ $(document).ready(function() {
     $(document).on('click', '.details-product-btn', function(e) {
         e.preventDefault();
         let productId = $(this).data('product-details-id');
-
         Swal.fire({
             title: 'Chargement...',
             allowOutsideClick: false,
             allowEscapeKey: false,
             showConfirmButton: false,
-            background: '#0f1117',
-            color: '#fff',
+            showCancelButton: false,
+            showDenyButton: false,
             willOpen: () => { Swal.showLoading(); }
         });
 
@@ -81,13 +80,13 @@ $(document).ready(function() {
                 }
 
                 // ── Prix ─────────────────────────────────────────────
-                // let priceHtml = `<span class="pd-price">${parseFloat(product.price).toLocaleString('fr-FR')} <small>FCFA</small></span>`;
-                // if (product.compare_price) {
-                //     const pct = Math.round((1 - product.price / product.compare_price) * 100);
-                //     priceHtml += `
-                //         <span class="pd-price-old">${parseFloat(product.compare_price).toLocaleString('fr-FR')} FCFA</span>
-                //         <span class="pd-discount">−${pct}%</span>`;
-                // }
+                let priceHtml = `<span class="pd-price">${parseFloat(product.price).toLocaleString('fr-FR')} <small>FCFA</small></span>`;
+                if (product.compare_price) {
+                    const pct = Math.round((1 - product.price / product.compare_price) * 100);
+                    priceHtml += `
+                        <span class="pd-price-old">${parseFloat(product.compare_price).toLocaleString('fr-FR')} FCFA</span>
+                        <span class="pd-discount">−${pct}%</span>`;
+                }
 
                 // ── Couleurs ─────────────────────────────────────────
                 let colorsHtml = '';

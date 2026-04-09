@@ -8,7 +8,7 @@
 			<div class="top-bar">
 				<div class="content-topbar flex-sb-m h-full container">
 					<div class="left-top-bar">
-						Livraison gratuite pour toute commande de plus de 1 000 000 FCFA
+						Livraison gratuite pour toute commande de plus de 500 000 FCFA
 					</div>
 
 					<div class="right-top-bar flex-w h-full">
@@ -64,8 +64,33 @@
 								<a href="{{ route('client.index') }}">Accueil</a>
 							</li>
 
-							<li class="{{ request()->routeIs('client.product') ? 'active-menu' : '' }}">
-								<a href="{{ route('client.product') }}">Boutique</a>
+							<li class="menu-item-has-children {{ request()->routeIs('client.product') ? 'active-menu' : '' }}">
+								<a href="{{ route('client.product') }}">
+									<span >Boutique</span>
+									<svg width="12" height="12" viewBox="0 0 24 24" fill="none" 
+										stroke="currentColor" stroke-width="2.5" 
+										style="margin-left:4px;transition:transform .2s">
+										<path d="M6 9l6 6 6-6"/>
+									</svg>
+								</a>
+
+								<ul class="sub-menu">
+									<li>
+										<a href="{{ route('client.product') }}">
+											<span class="sub-menu-dot"></span>
+											Tous les produits
+										</a>
+									</li>
+									@foreach($headerCategories as $cat)
+									<li>
+										<a href="{{ route('client.product', ['category' => $cat->id]) }}">
+											<span class="sub-menu-dot"></span>
+											{{ $cat->name }}
+											{{-- <span class="sub-menu-count">{{ $cat->products_count }}</span> --}}
+										</a>
+									</li>
+									@endforeach
+								</ul>
 							</li>
 
 							{{-- <li class=" {{ request()->routeIs('client.new') ? 'active-menu' : '' }}">
@@ -147,7 +172,7 @@
 			<ul class="topbar-mobile">
 				<li>
 					<div class="left-top-bar">
-						Livraison gratuite pour toute commande de plus de 1 000 000 FCFA
+						Livraison gratuite pour toute commande de plus de 500 000 FCFA
 					</div>
 				</li>
 
@@ -192,8 +217,37 @@
 				<li>
 					<a href="{{ route('client.index') }}">Accueil</a>
 				</li>
-				<li>
-					<a href="{{ route('client.product') }}">Boutique</a>
+				<li class="menu-item-has-children-mobile">
+					<div class="mobile-menu-toggle" onclick="toggleMobileSubmenu(this)">
+						<a href="{{ route('client.product') }}"><span style="margin-left: 21px; font-weight:500; color:#fff">Boutique</span></a>
+						<button type="button" class="mobile-submenu-arrow">
+							<svg width="14" height="14" viewBox="0 0 24 24" fill="none" 
+								stroke="currentColor" stroke-width="2.5">
+								<path d="M6 9l6 6 6-6"/>
+							</svg>
+						</button>
+					</div>
+					<ul class="sub-menu-mobile">
+						<li>
+							<a href="{{ route('client.product') }}">Tous les produits</a>
+						</li>
+						{{-- @foreach(\App\Models\Category::where('status', 1)->get() as $cat)
+						<li>
+							<a href="{{ route('client.product', ['category' => $cat->id]) }}">
+								{{ $cat->name }}
+							</a>
+						</li>
+						@endforeach --}}
+						@foreach($headerCategories as $cat)
+						<li>
+							<a href="{{ route('client.product', ['category' => $cat->id]) }}" style=" color:#fff">
+								<span class="sub-menu-dot"></span>
+								{{ $cat->name }}
+								{{-- <span class="sub-menu-count">{{ $cat->products_count }}</span> --}}
+							</a>
+						</li>
+						@endforeach
+					</ul>
 				</li>
 				{{-- <li>
 					<a href="{{ route('client.new') }}" class="rs1">Nouveautés</a>
@@ -225,3 +279,187 @@
 
 		
 	</header>
+
+	<style>
+		/* ══════════════════════════════════════════
+		SOUS-MENU DESKTOP
+		══════════════════════════════════════════ */
+		.menu-item-has-children {
+			position: relative;
+		}
+
+		.menu-item-has-children > a {
+			display: flex;
+			align-items: center;
+		}
+
+		/* Flèche rotation au hover */
+		.menu-item-has-children:hover > a svg {
+			transform: rotate(180deg);
+		}
+
+		.sub-menu {
+			position: absolute;
+			top: calc(100% + 8px);
+			left: 50%;
+			transform: translateX(-50%);
+			min-width: 240px;
+			background: #fff;
+			/* border-radius: 14px; */
+			box-shadow: 0 8px 32px rgba(10,22,40,.14);
+			border: 1px solid #e8eef8;
+			padding: 8px 0;
+			list-style: none;
+			margin: 0;
+			z-index: 9999;
+
+			/* Animation */
+			opacity: 0;
+			visibility: hidden;
+			transform: translateX(-50%) translateY(8px);
+			transition: opacity .25s ease, transform .25s ease, visibility .25s;
+			pointer-events: none;
+		}
+
+		/* Petite flèche vers le haut */
+		.sub-menu::before {
+			content: '';
+			position: absolute;
+			top: -6px;
+			left: 50%;
+			transform: translateX(-50%);
+			width: 12px;
+			height: 12px;
+			background: #fff;
+			border-left: 1px solid #e8eef8;
+			border-top: 1px solid #e8eef8;
+			rotate: 45deg;
+		}
+
+		.menu-item-has-children:hover .sub-menu {
+			opacity: 1;
+			visibility: visible;
+			transform: translateX(-50%) translateY(0);
+			pointer-events: auto;
+		}
+
+		.sub-menu li a {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			padding: 10px 20px;
+			font-size: 14px;
+			color: #0a1628 !important;
+			text-decoration: none;
+			transition: all .2s;
+			gap: 10px;
+			justify-content: flex-start;
+		}
+
+		.sub-menu li a:hover {
+			background: #f4f7fd;
+			color: #0066CC !important;
+			padding-left: 26px;
+		}
+
+		.sub-menu li:first-child a {
+			font-weight: 700;
+			color: #0066CC !important;
+			border-bottom: 1px solid #e8eef8;
+			margin-bottom: 4px;
+		}
+
+		.sub-menu-dot {
+			width: 6px;
+			height: 6px;
+			border-radius: 50%;
+			background: #c8d4e8;
+			flex-shrink: 0;
+			transition: background .2s;
+		}
+		.sub-menu li a:hover .sub-menu-dot {
+			background: #0066CC;
+		}
+
+		.sub-menu-count {
+			margin-left: auto;
+			font-size: 11px;
+			font-weight: 600;
+			background: #f0f4ff;
+			color: #0066CC;
+			padding: 2px 8px;
+			border-radius: 20px;
+			flex-shrink: 0;
+		}
+
+		/* ══════════════════════════════════════════
+		SOUS-MENU MOBILE
+		══════════════════════════════════════════ */
+		.menu-item-has-children-mobile {
+			list-style: none;
+		}
+
+		.mobile-menu-toggle {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+		}
+
+		.mobile-menu-toggle a {
+			flex: 1;
+		}
+
+		.mobile-submenu-arrow {
+			background: none;
+			border: none;
+			cursor: pointer;
+			padding: 8px 12px;
+			color: inherit;
+			transition: transform .25s;
+			display: flex;
+			align-items: center;
+		}
+
+		.mobile-submenu-arrow.open {
+			transform: rotate(180deg);
+		}
+
+		.sub-menu-mobile {
+			list-style: none;
+			margin: 0;
+			padding: 0 0 0 16px;
+			max-height: 0;
+			overflow: hidden;
+			transition: max-height .35s ease;
+		}
+
+		.sub-menu-mobile.open {
+			max-height: 600px;
+		}
+
+		.sub-menu-mobile li a {
+			display: block;
+			padding: 10px 12px;
+			font-size: 14px;
+			color: #6b7a99;
+			text-decoration: none;
+			border-left: 2px solid #e8eef8;
+			transition: all .2s;
+		}
+
+		.sub-menu-mobile li a:hover,
+		.sub-menu-mobile li:first-child a {
+			color: #0066CC;
+			border-left-color: #0066CC;
+		}
+	</style>
+
+	<script>
+		function toggleMobileSubmenu(el) {
+			var arrow  = el.querySelector('.mobile-submenu-arrow');
+			var submenu = el.closest('li').querySelector('.sub-menu-mobile');
+
+			arrow.classList.toggle('open');
+			submenu.classList.toggle('open');
+		}
+	</script>

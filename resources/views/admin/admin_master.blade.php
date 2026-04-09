@@ -35,10 +35,10 @@
     <div class="layout-container">
         <!-- Menu -->
 
-@if(Auth::check())
- 
-  
-@endif
+        @if(Auth::check())
+        
+        
+        @endif
 
             @include('admin.body.sidebar')
 

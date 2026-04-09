@@ -1,20 +1,6 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
+@extends('client.layout')
+@push('links')
     <title>Mon Compte ABS-TECHNOLOGIE</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="icon" type="image/png" href="{{ asset('frontend/images/icons/favicon.png') }}"/>
-    <link rel="stylesheet" type="text/css" href="{{ asset('frontend/vendor/bootstrap/css/bootstrap.min.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('frontend/fonts/font-awesome-4.7.0/css/font-awesome.min.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('frontend/fonts/iconic/css/material-design-iconic-font.min.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('frontend/vendor/animate/animate.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('frontend/vendor/css-hamburgers/hamburgers.min.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('frontend/vendor/animsition/css/animsition.min.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('frontend/vendor/select2/select2.min.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('frontend/vendor/MagnificPopup/magnific-popup.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('frontend/css/util.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('frontend/css/main.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 
     <style>
@@ -563,11 +549,11 @@
             .account-card-body { padding: 18px; }
         }
     </style>
-</head>
+@endpush
 
-<body class="animsition">
+    
 
-    @include('client.body.header')
+@section('content')
 
 
     <div class="container  p-t-80 p-b-80">
@@ -891,7 +877,7 @@
                                     @endif
                                     <div class="wishlist-card-img">
                                         @if($item->product->images->isNotEmpty())
-                                            <img src="{{ asset('storage/' . $item->product->images->first()->image_path) }}" alt="{{ $item->product->name }}">
+                                            <img src="{{ asset('storage/' . $item->product->images->first()->image_path) }}" loading="lazy" alt="{{ $item->product->name }}">
                                         @else
                                             <i class="zmdi zmdi-image-alt" style="font-size:48px;color:#ddd"></i>
                                         @endif
@@ -1038,16 +1024,14 @@
         </div>
     </div>
 
-    @include('client.body.footer')
+@endsection
+
+
+@push('scripts')
 
     {{-- Scripts --}}
-    <script src="{{ asset('frontend/vendor/jquery/jquery-3.2.1.min.js') }}"></script>
-    <script src="{{ asset('frontend/vendor/animsition/js/animsition.min.js') }}"></script>
-    <script src="{{ asset('frontend/vendor/bootstrap/js/popper.js') }}"></script>
-    <script src="{{ asset('frontend/vendor/bootstrap/js/bootstrap.min.js') }}"></script>
-    <script src="{{ asset('frontend/vendor/sweetalert/sweetalert.min.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-    <script src="{{ asset('frontend/js/main.js') }}"></script>
+    <script src="{{ asset('frontend/js/main.js') }}"defer></script>
 
     <script>
     $(document).ready(function () {
@@ -1109,9 +1093,9 @@
 
             const reader = new FileReader();
             reader.onload = function (e) {
-                $('#avatar-preview').html('<img src="' + e.target.result + '" style="width:100%;height:100%;object-fit:cover;border-radius:50%">');
+                $('#avatar-preview').html('<img src="' + e.target.result + '" loading="lazy" style="width:100%;height:100%;object-fit:cover;border-radius:50%">');
                 // Mettre à jour aussi le sidebar
-                $('.sidebar-avatar .avatar-circle').html('<img src="' + e.target.result + '" style="width:100%;height:100%;object-fit:cover;">');
+                $('.sidebar-avatar .avatar-circle').html('<img src="' + e.target.result + '" loading="lazy" style="width:100%;height:100%;object-fit:cover;">');
             };
             reader.readAsDataURL(file);
         });
@@ -1279,6 +1263,5 @@
     });
     </script>
 
-    @include('frontend.global_js')
-</body>
-</html>
+@endpush
+@stack('scripts')

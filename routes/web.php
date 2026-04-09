@@ -57,6 +57,7 @@ Route::prefix('client')->name('client.')->group(function () {
     Route::get('/about', [ClientController::class, 'about'])->name('about');
     Route::get('/product', [ClientController::class, 'product'])->name('product');
     Route::get('/products/{id}', [ClientController::class, 'show'])->name('product.detail');
+    Route::get('/product/details/{id}', [ClientController::class, 'details'])->name('detail.product');
     Route::get('/new', [ClientController::class, 'new'])->name('new');
     Route::get('/contact',[ClientController::class,'contact'])->name('contact');
     Route::get('/faqs', [ClientController::class, 'faqs'])->name('faqs');
